@@ -10,12 +10,15 @@
 $(function () {
 	// test stackoverflow upvote button
 	$('.vote').click(function () {
+		if ($(this).hasClass(''))
   		$(this).toggleClass('on');
 	});	
 
 	$('.arrow-down, .arrow-up').click(function () {
-  		$(this).toggleClass('on');
+  		
   		if ($(this).hasClass('arrow-up')) {
+
+  			// TEST
   			console.log('$(this).hasClass(arrow-up):');
   			console.log($(this).hasClass('arrow-up'));
   			console.log(
@@ -23,17 +26,76 @@ $(function () {
   				.text()
   				);
   			console.log("$(this).parent().children('.netVote').text()");  			
-  			$(this).parent().children('.netVote')
-  				.text(
-  					Number($(this).parent().children('.netVote').text()) + 1
-  				);
+
+  			// if oredy on, cancel upvote
+  			// if not, do upvote
+  			if ($(this).hasClass('on')) {
+  				// cancel  upvote ie decrement netVote
+  				$(this).parent().children('.netVote')
+  					.text(
+  						Number($(this).parent().children('.netVote').text()) - 1
+  					);
+  				// toggle color
+  				$(this).toggleClass('on');
+  			} else {
+	  			// do upvote ie increment upvote
+	  			$(this).parent().children('.netVote')
+	  				.text(
+	  					Number($(this).parent().children('.netVote').text()) + 1
+	  				);  		
+	  			// toggle color		
+  				$(this).toggleClass('on');
+  			}
+
+  			// double upvote if true
+  			if ($('.arrow-down').hasClass('on')) {
+	  			// do upvote ie increment upvote
+	  			$(this).parent().children('.netVote')
+	  				.text(
+	  					Number($(this).parent().children('.netVote').text()) + 1
+	  				);  		  				
+  			}
+
+  			// turn down-arrow to color grey (sorta de-clickit)
+  			$('.arrow-down').removeClass('on');
+
   		} else if ($(this).hasClass('arrow-down')) {
+
+  			// TEST
   			console.log('$(this).hasClass(arrow-up):');
   			console.log($(this).hasClass('arrow-up'));	
-  			$(this).parent().children('.netVote')
-  				.text(
-  					Number($(this).parent().children('.netVote').text()) - 1
-  				);  			
+
+  			// if oredy on, cancel upvote
+  			// if not, do upvote
+  			if ($(this).hasClass('on')) {
+  				// cancel downvote ie increment netVote
+  				$(this).parent().children('.netVote')
+  					.text(
+  						Number($(this).parent().children('.netVote').text()) + 1
+  					);
+  				// toggle color
+  				$(this).toggleClass('on');
+  			} else {
+	  			// do downvote ie decrement upvote
+	  			$(this).parent().children('.netVote')
+	  				.text(
+	  					Number($(this).parent().children('.netVote').text()) - 1
+	  				);  		
+	  			// toggle color		
+  				$(this).toggleClass('on');
+  			}
+
+  			// double downvote if true
+  			if ($('.arrow-up').hasClass('on')) {
+	  			// do upvote ie increment upvote
+	  			$(this).parent().children('.netVote')
+	  				.text(
+	  					Number($(this).parent().children('.netVote').text()) - 1
+	  				);  		  				
+  			}  			
+
+  			// turn up-arrow to color grey (sorta de-clickit)
+  			$('.arrow-up').removeClass('on');  			
   		}
   		
 	});	
