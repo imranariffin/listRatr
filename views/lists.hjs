@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+   	<br>    
+    {{#lists}}
+
+	<div class="panel panel-default">    
+	 	<!-- Default panel contents -->
+	 	<div class="panel-heading">
+    		<b>{{ title }}</b> <br>
+    	</div>
+
+    	{{#isAdmin}}
+
+    	id: {{_id}} <br>
+    	dateCreated : {{ dateCreated }} <br>
+    	Owner : {{ owner }} <br>
+    	Score : {{ score }} <br>
+    	Votes : {{ votes }} <br>
+    	Comments : {{ comments }} <br>
+    	Likes : {{ likes }} <br>
+
+    	Items : {{ items }}
+
+    	{{/isAdmin}}
+    	<br>
+		<div class="panel-body">
+			Likes : {{ likes }} <br>
+			{{#items}}
+				<div class="panel panel-default">
+				<!-- {{.}} -->
+					<div class="panel-heading">{{header}}</div>
+					<div class="panel-body">{{content}}</div>
+				</div>
+			{{/items}}
+		</div>    	
+	
+	</div>        	
+
+    {{/lists}}
+
+
+	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Panel heading (id : )</div>
+	  <div class="panel-body">
+	    <p>...</p>
+	  </div>
+
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item"> list-item </li>
+	  </ul>
+	</div>    
+
+  </body>
+</html>

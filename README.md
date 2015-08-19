@@ -1,3 +1,3 @@
 # listRatr
-Make your list. Share it. View other lists. Rate em.
+Make your own list. Share it. View other lists. Rate em.
 

@@ -8,19 +8,50 @@ var List = require('../schemas/list');
 var ObjectId = mongoose.Schema.ObjectId;
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'ListRatr' });
-});
+router.get('/', homeGET);
 
 /* GET signup page. */
-router.get('/signup', function (req, res, next) {
+router.get('/signup', signupGET);
+
+/* POST signup form. */
+router.post('/signup', signupPOST);
+
+/* GET signin page. */
+router.get('/signin', signinGET);
+
+/* POST signup form. */
+router.post('/signin', signinPOST);
+
+/* GET ratrs's profile page. */
+router.get('/profile', profileGET);
+
+/* GET ratr's top list. */
+router.get('/lists', listsGET);
+
+/* GET ratrs's create list page. */
+router.get('/createList', CreateListGET);
+
+/* POST ratrs creates a new list. */
+router.post('/createList', createListPOST);
+
+/* GET ratrs's list page. */
+router.get('/mylists/:ratrId', ratrIdGET);
+
+//////////////////////////////////////////////////
+// 				ROUTE MIDDLEWARES 				//
+//////////////////////////////////////////////////
+
+function homeGET (req, res, next) {
+  res.render('index', { title: 'ListRatr' });
+}
+
+function signupGET (req, res, next) {
 	res.render('signup', { 
 		title: 'Signup' 
 	});
-});
+}
 
-/* POST signup form. */
-router.post('/signup', function (req, res, next) {
+function signupPOST (req, res, next) {
 	// get form data
 	var email = req.body.email;
 	var password = req.body.password;
@@ -46,17 +77,15 @@ router.post('/signup', function (req, res, next) {
 			}
 		}
 	});
-});
+}
 
-/* GET signin page. */
-router.get('/signin', function (req, res, next) {
+function signinGET (req, res, next) {
 	res.render('signin', { 
 		title: 'Signin' 
 	});
-});
+}
 
-/* POST signup form. */
-router.post('/signin', function (req, res, next) {
+function signinPOST (req, res, next) {
 	// get form data
 	var email = req.body.email;
 	var password = req.body.password;
@@ -77,20 +106,18 @@ router.post('/signin', function (req, res, next) {
 			}
 		}
 	});
-});
+}
 
-/* GET ratrs's profile page. */
-router.get('/profile', function (req, res, next) {
+function profileGET (req, res, next) {
 	var ratr = req.session.ratr;
 
 	if (ratr) 
 		res.send(ratr);
 	else 
 		res.send('bad: ratr undefined');
-});
+}
 
-/* GET ratr's top list. */
-router.get('/list', function (req, res, next) {
+function listsGET (req, res, next) {
 	// get ratrId
 	var ratr = req.session.ratr;
 	var ratrId = ratr._id;
@@ -102,15 +129,20 @@ router.get('/list', function (req, res, next) {
 		else {
 			// pseudo: in future top list should be list with highest rank/score
 			// for now assume first list to be top list
-			topList = lists[0];
-			res.send(topList);
+			// topList = lists[0];
+			// res.send(lists);
+			// rendaaah!
+			res.render('lists', {
+				title : 'ListRatr - Lists',
+				lists : lists,
+				isAdmin : false,
+			});
 		}
 	});	
 
-});
+}
 
-/* GET ratrs's create list page. */
-router.get('/createList', function (req, res, next) {
+function CreateListGET (req, res, next) {
 	// get ratr
 	var ratr = req.session.ratr;
 
@@ -118,10 +150,9 @@ router.get('/createList', function (req, res, next) {
 	res.render('create-list', {
 		title : 'Create List'
 	});
-});
+}
 
-/* POST ratrs creates a new list. */
-router.post('/createList', function (req, res, next) {
+function createListPOST (req, res, next) {
 	// get ratr
 	var ratr = req.session.ratr;
 
@@ -182,10 +213,9 @@ router.post('/createList', function (req, res, next) {
 	// res.send(formData);
 
 	// res.send(list);
-});
+}
 
-/* GET ratrs's list page. */
-router.get('/:ratrId', function (req, res, next) {
+function ratrIdGET (req, res, next) {
 	// get ratr
 	// var ratr = req.session.ratr;
 
@@ -219,6 +249,6 @@ router.get('/:ratrId', function (req, res, next) {
 	// 		res.send(lists);
 	// 	}
 	// });
-});
+}
 
 module.exports = router;

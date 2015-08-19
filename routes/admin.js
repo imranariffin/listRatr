@@ -18,9 +18,29 @@ router.get('/ratrs', function (req, res, next) {
 		if (err) {
 			res.send(err);
 		} else {
+
+			var nRatrs = ratrs.length;
+
+			ratrList = [];
+
+			console.log('looping through ratrs as obtained from .find():');
+			for (i in ratrs) {
+				console.log(i);
+				console.log(ratrs[i]);
+				console.log('typeof:');
+				console.log(typeof(ratrs[i]));
+				ratrList.push(ratrs[i]);
+			}
+			console.log('');
+
+			console.log(ratrList);
+
 			res.render('ratrs', { 
 				title: 'admin - ratrs',
-				ratrs : ratrs
+				ratrs : ratrs,
+				ratrList : ratrList,
+				typeofRatrs : typeof(ratrs),
+				nRatrs : nRatrs
 			});
 		}
 	});
@@ -31,8 +51,17 @@ router.get('/lists', function (req, res, next) {
 	List.find({}, function (err, lists) {
 		if (err) 
 			res.send(err);
-		else 
-			res.send(lists);
+		else {
+			// res.send(lists);
+			// rendaaaahh!
+			res.render('lists', {
+				title : 'ListRatr - All Lists',
+				lists : lists,
+
+				// show additinal data to admin
+				isAdmin : true
+			});
+		}
 	});
 });
 
