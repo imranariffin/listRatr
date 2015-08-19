@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    
+    <!-- signup form -->
+    <form action="/signin" method="POST">
+    	<!-- csrf for security -->
+    	<input type="hidden" name="_csrf" value="crsfToken">
+
+    	<!-- form data -->
+    	Email : <br>
+    	<input type="text" name="email"> <br>
+    	Password : <br>
+    	<input type="password" name="password"> <br>
+        <br>
+    	<!-- form submit -->
+    	<input type="submit" value="signin">
+    </form>
+
+
+  </body>
+</html>
