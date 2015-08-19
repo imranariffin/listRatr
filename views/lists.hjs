@@ -4,6 +4,41 @@
     <title>{{ title }}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript">
+
+$(function () {
+	// test stackoverflow upvote button
+	$('.vote').click(function () {
+  		$(this).toggleClass('on');
+	});	
+
+	$('.arrow-down, .arrow-up').click(function () {
+  		$(this).toggleClass('on');
+  		if ($(this).hasClass('arrow-up')) {
+  			console.log('$(this).hasClass(arrow-up):');
+  			console.log($(this).hasClass('arrow-up'));
+  			console.log(
+  				$(this).parent().children('.netVote')
+  				.text()
+  				);
+  			console.log("$(this).parent().children('.netVote').text()");  			
+  			$(this).parent().children('.netVote')
+  				.text(
+  					Number($(this).parent().children('.netVote').text()) + 1
+  				);
+  		} else if ($(this).hasClass('arrow-down')) {
+  			console.log('$(this).hasClass(arrow-up):');
+  			console.log($(this).hasClass('arrow-up'));	
+  			$(this).parent().children('.netVote')
+  				.text(
+  					Number($(this).parent().children('.netVote').text()) - 1
+  				);  			
+  		}
+  		
+	});	
+});
+    </script>
   </head>
   <body>
     <h1>{{ title }}</h1>
@@ -35,7 +70,17 @@
 			{{#items}}
 				<div class="panel panel-default">
 				<!-- {{.}} -->
-					<div class="panel-heading">{{header}}</div>
+					<div class="panel-heading">
+						<div class="arrow-up"></div>
+						<div class="netVote">0</div>
+						<div class="arrow-down"></div> {{header}}
+					</div>
+					<!-- <span class="vote"> </span> -->
+					<!-- <button type="button" class="btn btn-default btn-vlg"> -->
+					<!-- <div style="height:100px;width:100px"> -->
+						<!-- <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> -->
+					<!-- </button> -->
+					<!-- </div> -->
 					<div class="panel-body">{{content}}</div>
 				</div>
 			{{/items}}

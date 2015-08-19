@@ -126,6 +126,11 @@ $(function () {
 			// do nothing
 		}
 	});
+
+	// test stackoverflow upvote button
+	$('.vote').click(function () {
+  		$(this).toggleClass('on');
+	});	
 });
 
 ///////////////////////////
@@ -475,8 +480,12 @@ function activateNeighbourItem (isToNext) {
   <body>
     <h1>{{ title }}</h1>
     <p> <h3>Create your list: </h3>
-    Make your list. Share it. View other lists. Rate em.
+	Make your list. Share it. View other lists. Rate em.
     </p>
+
+    <br>
+    Click to vote: <span class="vote"> </span>
+    <br>
 
     <form actions="/createList" method="POST">
     	<input id="listSize" type="hidden" name="listSize" value="1">

@@ -120,7 +120,11 @@ function profileGET (req, res, next) {
 function listsGET (req, res, next) {
 	// get ratrId
 	var ratr = req.session.ratr;
-	var ratrId = ratr._id;
+	var ratrId;
+	if (ratr)
+		ratrId = ratr._id;
+	else
+		res.send('bad: no user logged in on this session');
 
 	// get first list from db
 	List.find({}, function (err, lists) {
