@@ -3,6 +3,7 @@
   <head>
     <title>{{ title }}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/new-style.css' />
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript">
@@ -110,7 +111,9 @@ $(function () {
 	<div class="panel panel-default">    
 	 	<!-- Default panel contents -->
 	 	<div class="panel-heading">
-    		<b>{{ title }}</b> <br>
+	 	<button type="button" class="btn btn-default btn-vlg">
+    		<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>  <b>{{ title }} </b> <br>
+		</button>
     	</div>
 
     	{{#isAdmin}}
@@ -126,23 +129,36 @@ $(function () {
     	Items : {{ items }}
 
     	{{/isAdmin}}
+
+<!--     	<div>
+    		<div style="background-color:blue;width:50px;height:50px;float:left"></div>
+    		<div style="background-color:green;width:50px;height:50px;float:left"></div>
+    	</div> -->
+
     	<br>
 		<div class="panel-body">
-			Likes : {{ likes }} <br>
+			Likes : {{ likes }}   
+			<br>
 			{{#items}}
 				<div class="panel panel-default">
 				<!-- {{.}} -->
-					<div class="panel-heading">
-						<div class="arrow-up"></div>
-						<div class="netVote">0</div>
-						<div class="arrow-down"></div> {{header}}
+					<div class="panel-heading" style="overflow:hidden;">
+						<div style="height:100%;float:left">
+							<div class="arrow-up"></div>
+							<div class="netVote">0</div>						
+							<div class="arrow-down"></div>
+						</div>
+    					<div style="height:100%;float:left;vertical-align:middle;text-align:center;display:table-cell;">
+    						<div style="height:100%;vertical-align:middle;text-align:center;display:table-cell;">{{header}}</div>
+    					</div>
+						 
 					</div>
 					<!-- <span class="vote"> </span> -->
-					<!-- <button type="button" class="btn btn-default btn-vlg"> -->
-					<!-- <div style="height:100px;width:100px"> -->
-						<!-- <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> -->
-					<!-- </button> -->
-					<!-- </div> -->
+<!-- 					<button type="button" class="btn btn-default btn-vlg">
+					<div style="height:100px;width:100px">
+						<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+					</button>
+					</div> -->
 					<div class="panel-body">{{content}}</div>
 				</div>
 			{{/items}}

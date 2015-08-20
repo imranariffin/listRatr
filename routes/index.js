@@ -37,6 +37,9 @@ router.post('/createList', createListPOST);
 /* GET ratrs's list page. */
 router.get('/mylists/:ratrId', ratrIdGET);
 
+/* GET ratr likes a list */
+router.get('/like', likePOST);
+
 //////////////////////////////////////////////////
 // 				ROUTE MIDDLEWARES 				//
 //////////////////////////////////////////////////
@@ -253,6 +256,43 @@ function ratrIdGET (req, res, next) {
 	// 		res.send(lists);
 	// 	}
 	// });
+}
+
+function likePOST (req, res, next) {
+	var ratr = req.session.ratr;
+
+	// expects a req.body.listId;
+	var listId = req.body.listId;
+
+	if (!ratr)
+		res.send('bad: please login to like');
+
+	else {
+		var ratrId = ratr._id;
+
+		List.findById(listId, function (err, list) {
+			if (err) {
+				res.send(err);
+			} else {
+				// increse list's likes
+				list.likes += 1;
+				
+				// update list score
+				// list.score += topRank(bla bla)
+
+				// update ratr's likes
+				ListRatr.findById(ratrId, function (err, ratr) {
+					if (err) {
+						res.send(err);
+					} else {
+						ratr.likes.push(listId);
+						
+						res.send(ratr.likes);
+					}
+				});
+			}
+		});
+	}
 }
 
 module.exports = router;
