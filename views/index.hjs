@@ -6,10 +6,8 @@
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/new-style.css' />
   </head>
-  <body>
-    <h1 style="text-align:center;">{{ title }}</h1>
-    <h3 style="text-align:center;">Welcome to {{ title }}: </h3>
-    
+  <body style="margin-top:-45px;">
+    <h2 style="text-align:center;">{{ title }}</h2>
     <p style="text-align:center;">Make your list. Share it. View other lists. Rate em.
     </p>
 
@@ -33,7 +31,7 @@
 	</div>	
 
 	<br>
-	<h4 style="text-align:center">Top Lists:</h4>
+<!-- 	<h4 style="text-align:center">Top Lists:</h4> -->
 
     {{#lists}}
 

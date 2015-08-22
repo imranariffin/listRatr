@@ -67,7 +67,7 @@ function homeGET (req, res, next) {
 
 			// rendaaah!
 			res.render('index', {
-				title : 'ListRatr - Lists',
+				title : 'ListRatr',
 				lists : lists,
 				isAdmin : false
 			});
