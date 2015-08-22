@@ -138,6 +138,17 @@ function listsGET (req, res, next) {
 			// for now assume first list to be top list
 			// topList = lists[0];
 			// res.send(lists);
+
+			console.log('\n\nlists before sort:\n');
+			console.log(lists);
+			console.log('\n\n');
+
+			// rank now! (based on likes for now)
+			lists = sortByLikes(lists);
+			console.log('\n\nlists after sort:\n');
+			console.log(lists);
+			console.log('\n\n');
+
 			// rendaaah!
 			res.render('lists', {
 				title : 'ListRatr - Lists',
@@ -146,7 +157,20 @@ function listsGET (req, res, next) {
 			});
 		}
 	});	
+}
 
+// sort lists by likes ind descending order
+// (highest likes first)
+function sortByLikes (lists) {
+	return lists.sort(function (a, b) {
+
+		console.log('a.likes:');
+		console.log(a.likes);
+		console.log('b.likes:');
+		console.log(b.likes);
+
+		return b.likes - a.likes;
+	});
 }
 
 function CreateListGET (req, res, next) {
@@ -325,7 +349,7 @@ function updateRatrLikes (res, body) {
 	var ratr = body.ratr;
 	var ratrId = ratr._id;
 	var listId = list._id;
-	
+
 	// update ratr's likes
 	ListRatr.findById(ratrId, function (err, ratr) {
 		if (err) {
