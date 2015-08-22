@@ -5,103 +5,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/new-style.css' />
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript">
 
-$(function () {
-	// test stackoverflow upvote button
-	$('.vote').click(function () {
-		if ($(this).hasClass(''))
-  		$(this).toggleClass('on');
-	});	
-
-	$('.arrow-down, .arrow-up').click(function () {
-  		
-  		if ($(this).hasClass('arrow-up')) {
-
-  			// TEST
-  			console.log('$(this).hasClass(arrow-up):');
-  			console.log($(this).hasClass('arrow-up'));
-  			console.log(
-  				$(this).parent().children('.netVote')
-  				.text()
-  				);
-  			console.log("$(this).parent().children('.netVote').text()");  			
-
-  			// if oredy on, cancel upvote
-  			// if not, do upvote
-  			if ($(this).hasClass('on')) {
-  				// cancel  upvote ie decrement netVote
-  				$(this).parent().children('.netVote')
-  					.text(
-  						Number($(this).parent().children('.netVote').text()) - 1
-  					);
-  				// toggle color
-  				$(this).toggleClass('on');
-  			} else {
-	  			// do upvote ie increment upvote
-	  			$(this).parent().children('.netVote')
-	  				.text(
-	  					Number($(this).parent().children('.netVote').text()) + 1
-	  				);  		
-	  			// toggle color
-  				$(this).toggleClass('on');
-  			}
-
-  			// double upvote if true
-  			if ($('.arrow-down').hasClass('on')) {
-	  			// do upvote ie increment upvote
-	  			$(this).parent().children('.netVote')
-	  				.text(
-	  					Number($(this).parent().children('.netVote').text()) + 1
-	  				);  		  				
-  			}
-
-  			// turn down-arrow to color grey (sorta de-clickit)
-  			$('.arrow-down').removeClass('on');
-
-  		} else if ($(this).hasClass('arrow-down')) {
-
-  			// TEST
-  			console.log('$(this).hasClass(arrow-up):');
-  			console.log($(this).hasClass('arrow-up'));	
-
-  			// if oredy on, cancel upvote
-  			// if not, do upvote
-  			if ($(this).hasClass('on')) {
-  				// cancel downvote ie increment netVote
-  				$(this).parent().children('.netVote')
-  					.text(
-  						Number($(this).parent().children('.netVote').text()) + 1
-  					);
-  				// toggle color
-  				$(this).toggleClass('on');
-  			} else {
-	  			// do downvote ie decrement upvote
-	  			$(this).parent().children('.netVote')
-	  				.text(
-	  					Number($(this).parent().children('.netVote').text()) - 1
-	  				);  		
-	  			// toggle color		
-  				$(this).toggleClass('on');
-  			}
-
-  			// double downvote if true
-  			if ($('.arrow-up').hasClass('on')) {
-	  			// do upvote ie increment upvote
-	  			$(this).parent().children('.netVote')
-	  				.text(
-	  					Number($(this).parent().children('.netVote').text()) - 1
-	  				);  		  				
-  			}  			
-
-  			// turn up-arrow to color grey (sorta de-clickit)
-  			$('.arrow-up').removeClass('on');  			
-  		}
-  		
-	});	
-});
-    </script>
   </head>
   <body>
     <h1>{{ title }}</h1>
@@ -113,12 +17,14 @@ $(function () {
 	 	<div class="panel-heading">
 	 	<!-- <button type="button" class="btn btn-default btn-vlg"> -->
 
-	 	<form action="/like">{{ likes }}
-	 	<input type="hidden" name="listId" value="{{listId}}">
-    		<input type="submit" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>  <b>{{ title }} </b> <br>
-    	</form>
+	 	
+	 	<!-- <input type="hidden" name="listId" value="{{listId}}"> -->
+    		<!-- <div id="likeId-{{_id}}" class="likedButton"> -->
+          <b>{{ title }} </b> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span id="likeValue-{{_id}}">{{ likes }} <br></span>
+        <!-- </div> -->
+  
 		<!-- </button> -->
-    	</div>
+    </div>
 
     	{{#isAdmin}}
 
@@ -182,6 +88,7 @@ $(function () {
 	    <li class="list-group-item"> list-item </li>
 	  </ul>
 	</div>    
-
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/javascripts/lists-scripts.js"></script>
   </body>
 </html>

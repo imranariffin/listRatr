@@ -37,8 +37,8 @@ router.post('/createList', createListPOST);
 /* GET ratrs's list page. */
 router.get('/mylists/:ratrId', ratrIdGET);
 
-/* GET ratr likes a list */
-router.get('/like', likePOST);
+/* POST ratr likes a list */
+router.post('/like', likePOST);
 
 //////////////////////////////////////////////////
 // 				ROUTE MIDDLEWARES 				//
@@ -275,29 +275,123 @@ function likePOST (req, res, next) {
 	else {
 		var ratrId = ratr._id;
 
-		List.findById(listId, function (err, list) {
-			if (err) {
-				res.send(err);
-			} else {
-				// increse list's likes
-				list.likes += 1;
-				
-				// update list score
-				// list.score += topRank(bla bla)
-
-				// update ratr's likes
-				ListRatr.findById(ratrId, function (err, ratr) {
-					if (err) {
-						res.send(err);
-					} else {
-						ratr.likes.push(listId);
-						
-						res.send(ratr.likes);
-					}
-				});
-			}
+		updateListLikes (res, {
+			listId : listId,
+			ratr : ratr
 		});
 	}
 }
 
 module.exports = router;
+
+///////////////////////////////////////
+///		 	HELPER FUNCTIONS 		///
+///////////////////////////////////////
+
+function updateListLikes (res, body) {
+	var listId = body.listId;
+	var ratr = body.ratr;
+	// var listId = list._id;
+
+	List.findById(listId, function (err, list) {
+		if (err) {
+			res.send(err);
+		} else {
+			// // increse list's likes
+			// list.likes += 1;
+			
+			// update list score
+			// list.score += topRank(bla bla)
+
+			// list.save(function (err) {
+			// 	if (err) {
+			// 		res.send(err);
+			// 	} else {
+
+			// update ratr's likes then send response
+			updateRatrLikes(res, {
+				list : list,
+				ratr : ratr
+			});
+
+			// 	}
+			// });
+		}
+	});
+}
+
+function updateRatrLikes (res, body) {
+	var list = body.list;
+	var ratr = body.ratr;
+	var ratrId = ratr._id;
+	var listId = list._id;
+	
+	// update ratr's likes
+	ListRatr.findById(ratrId, function (err, ratr) {
+		if (err) {
+			res.send(err);
+		} else {
+			var response;
+
+
+			// if ratr has liked, ratr.likes.remove(list) & list.likes--
+			// else, ratr.likes.push(list) & list.likes++
+			if (hasLiked(ratr, list)) {
+				// remove list from ratr.likes
+				ratr.likes.splice(ratr.likes.indexOf(list._id), ratr.likes.length);
+				// decrement list.likes
+				list.likes--;
+				// set success response then send
+				response = {
+					ratr : ratr,
+					list : list,
+					status : 'success: unlike'
+				};				
+			} else {
+				// push list to ratr.likes
+				ratr.likes.push(listId);
+				// increment list.likes
+				list.likes++;
+				// set success response then send
+				response = {
+					ratr : ratr,
+					list : list,
+					status : 'success: like'
+				};				
+			}
+
+			// save both
+			ratr.save();
+			list.save();
+
+			res.send(response);
+
+
+			// // save updates
+			// ratr.save(function (err) {
+			// 	if (err) {
+			// 		res.send(err);
+			// 	} else {
+
+			// 		// set success response then send
+			// 		var response = {
+			// 			ratr : ratr,
+			// 			list : list
+			// 		};
+			// 		res.send(response);
+			// 	}
+			// });
+		}
+	});	
+}
+
+// ratr is ratr Mongo Object, 
+// list is list Mongo Object
+function hasLiked (ratr, list) {
+
+	if (ratr.likes.indexOf(list._id) === -1) {
+		return false;
+	} else {
+		return true;
+	}
+}
