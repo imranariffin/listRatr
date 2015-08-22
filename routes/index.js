@@ -45,7 +45,34 @@ router.post('/like', likePOST);
 //////////////////////////////////////////////////
 
 function homeGET (req, res, next) {
-  res.render('index', { title: 'ListRatr' });
+	// get first list from db
+	List.find({}, function (err, lists) {
+		if (err) 
+			res.send(err);
+		else {
+			// pseudo: in future top list should be list with highest rank/score
+			// for now assume first list to be top list
+			// topList = lists[0];
+			// res.send(lists);
+
+			console.log('\n\nlists before sort:\n');
+			console.log(lists);
+			console.log('\n\n');
+
+			// rank now! (based on likes for now)
+			lists = sortByLikes(lists);
+			console.log('\n\nlists after sort:\n');
+			console.log(lists);
+			console.log('\n\n');
+
+			// rendaaah!
+			res.render('index', {
+				title : 'ListRatr - Lists',
+				lists : lists,
+				isAdmin : false
+			});
+		}
+	});	
 }
 
 function signupGET (req, res, next) {
@@ -153,7 +180,7 @@ function listsGET (req, res, next) {
 			res.render('lists', {
 				title : 'ListRatr - Lists',
 				lists : lists,
-				isAdmin : false,
+				isAdmin : false
 			});
 		}
 	});	
@@ -161,6 +188,13 @@ function listsGET (req, res, next) {
 
 // sort lists by likes ind descending order
 // (highest likes first)
+/* NEXT PLAN :
+	shiftRank() on back-end on every /like
+	so on /lists. simply pick, for example, top 10
+
+	shiftRank() :
+		move up an object step by step until 
+*/
 function sortByLikes (lists) {
 	return lists.sort(function (a, b) {
 
