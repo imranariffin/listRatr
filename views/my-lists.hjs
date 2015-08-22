@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- <link rel='stylesheet' href='/stylesheets/new-style.css' /> -->
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />    
+  </head>
+  <body>
+
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading"><h3>{{ title }} ({{ nLists }}) </h3></div>
+
+      <div class="panel-body">
+        <!-- List group -->
+        <!-- <ul class="list-group">
+            <li class="list-group-item"> list-item </li>
+        </ul> -->
+        {{#lists}}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            {{title}}
+          </div>
+        </div>
+        {{/lists}}
+      </div>
+  </div>    
+
+    {{lists}}
+
+    <br><br>
+
+  </body>
+</html>

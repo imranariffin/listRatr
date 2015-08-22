@@ -241,7 +241,12 @@ function ratrIdGET (req, res, next) {
 			if (err)
 				res.send(err);
 			else 
-				res.send(lists);
+				// res.send(lists);
+				res.render('my-lists', {
+					title : 'My Lists',
+					lists : lists,
+					nLists : lists.length
+				});
 		});
 	}
 

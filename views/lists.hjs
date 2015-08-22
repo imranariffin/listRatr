@@ -44,7 +44,7 @@ $(function () {
 	  				.text(
 	  					Number($(this).parent().children('.netVote').text()) + 1
 	  				);  		
-	  			// toggle color		
+	  			// toggle color
   				$(this).toggleClass('on');
   			}
 
@@ -111,9 +111,13 @@ $(function () {
 	<div class="panel panel-default">    
 	 	<!-- Default panel contents -->
 	 	<div class="panel-heading">
-	 	<button type="button" class="btn btn-default btn-vlg">
-    		<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>  <b>{{ title }} </b> <br>
-		</button>
+	 	<!-- <button type="button" class="btn btn-default btn-vlg"> -->
+
+	 	<form action="/like">{{ likes }}
+	 	<input type="hidden" name="listId" value="{{listId}}">
+    		<input type="submit" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>  <b>{{ title }} </b> <br>
+    	</form>
+		<!-- </button> -->
     	</div>
 
     	{{#isAdmin}}
@@ -134,10 +138,7 @@ $(function () {
     		<div style="background-color:blue;width:50px;height:50px;float:left"></div>
     		<div style="background-color:green;width:50px;height:50px;float:left"></div>
     	</div> -->
-
-    	<br>
 		<div class="panel-body">
-			Likes : {{ likes }}   
 			<br>
 			{{#items}}
 				<div class="panel panel-default">
