@@ -15,7 +15,7 @@ $(function () {
 
 
 		// create new element the jQuery way //
-		createListItemWithPanel(listSize);
+		createListItemWithPanel(Number(listSize)-1);
 
 		// var itemContent = "<li class='list-group-item'";
 		// itemContent += " id='" + listSize + "'>";
@@ -351,6 +351,9 @@ function focusNextOrPrev (event) {
 ///////////////////////////
 
 function createListItemWithPanel(listSize) {
+
+	listSize = String(listSize);
+
 	// create LIST-ITEM, insert into list
 	jQuery("<li class='list-group-item'/>")
 		.attr("id", "list-group-item" + listSize)
