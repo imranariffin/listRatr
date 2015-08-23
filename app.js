@@ -21,7 +21,7 @@ var MONGO_URI = require('./auth/mongo').MONGO_URI;
 //   }
 // });
 var localMongo = 'mongodb://localhost/listratr';
-mongoose.connect(localMongo, function (err) {
+mongoose.connect(MONGO_URI, function (err) {
   if (err) {
     console.log(err);
     // throw err; 
