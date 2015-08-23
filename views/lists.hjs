@@ -75,19 +75,6 @@
 
     {{/lists}}
 
-
-	<div class="panel panel-default">
-	  <!-- Default panel contents -->
-	  <div class="panel-heading">Panel heading (id : )</div>
-	  <div class="panel-body">
-	    <p>...</p>
-	  </div>
-
-	  <!-- List group -->
-	  <ul class="list-group">
-	    <li class="list-group-item"> list-item </li>
-	  </ul>
-	</div>    
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="/javascripts/lists-scripts.js"></script>
   </body>

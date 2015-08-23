@@ -14,9 +14,11 @@
 	Make your list. Share it. View other lists. Rate em.
     </p>
 
+    <form action="/listrize" method="POST">
     <br>
-    Click to vote: <span class="vote"> </span>
-    <br>
+  	<input id="article-url" class="form-control" type="text" name="url" aria-describedby="basic-addon1" placeholder="url of list-based article" id="list-title-input">
+  	<br>
+  	</form>
 
     <form actions="/createList" method="POST">
     	<input id="listSize" type="hidden" name="listSize" value="1">

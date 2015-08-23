@@ -6,7 +6,7 @@
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/new-style.css' />
   </head>
-  <body style="margin-top:-45px;">
+  <body style="margin-top:-45px;background-color:#f6f6ef;">
     <h2 style="text-align:center;">{{ title }}</h2>
     <p style="text-align:center;">Make your list. Share it. View other lists. Rate em.
     </p>
@@ -20,19 +20,23 @@
 	</div> -->
 	<div class="btn-group btn-group-justified" role="group" aria-label="...">
 	  <div class="btn-group" role="group">
-	    <a href="/signup"><button type="button" class="btn btn-default">Be a Ratr</button></a>
+	    <a href="/lists"><button type="button" class="btn btn-default">View All Lists</button></a>
+	  </div>	
+	  <div class="btn-group" role="group">
+	    <a href="/createList"><button type="button" class="btn btn-default">Create New List</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
 	    <a href="/signin"><button type="button" class="btn btn-default">Login as a Ratr</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
-	    <a href="createList"><button type="button" class="btn btn-default">Create New List</button></a>
+		<a href="/signup"><button type="button" class="btn btn-default">Be a Ratr</button></a>	  
 	  </div>
 	</div>	
 
 	<br>
 <!-- 	<h4 style="text-align:center">Top Lists:</h4> -->
 
+<div id="main-div" style="width:65%;position:absolute;;left:17.5%;">
     {{#lists}}
 
 	<div class="panel panel-default">    
@@ -97,6 +101,7 @@
 	</div>        	
 
     {{/lists}}
+</div>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="/javascripts/lists-scripts.js"></script>
