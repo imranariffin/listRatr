@@ -25,8 +25,11 @@ router.post('/signin', signinPOST);
 /* GET ratrs's profile page. */
 router.get('/profile', profileGET);
 
-/* GET ratr's top list. */
+/* GET all lists. */
 router.get('/lists', listsGET);
+
+/* GET a list's individual page. */
+router.get('/lists/:listName', getOneListByName);
 
 /* GET ratrs's create list page. */
 router.get('/createList', CreateListGET);
@@ -69,7 +72,10 @@ function homeGET (req, res, next) {
 			res.render('index', {
 				title : 'ListRatr',
 				lists : lists,
-				isAdmin : false
+				isAdmin : false,
+				partials : {
+					listsContainer : 'lists-container'
+				}
 			});
 		}
 	});	
@@ -180,10 +186,62 @@ function listsGET (req, res, next) {
 			res.render('lists', {
 				title : 'ListRatr - Lists',
 				lists : lists,
-				isAdmin : false
+				isAdmin : false,
+				partials : {
+					listsContainer : 'lists-container'
+				}
 			});
 		}
 	});	
+}
+
+function getOneListByName (req, res, next) {
+	// get list name from url
+	var listName = req.params.listName;
+
+	// convert listName from 'a-random-list-name' to 'aRandomListName'
+	var properListName = properizeListName(listName);
+
+	console.log('properListName:');
+	console.log(properListName);
+
+	List.findOne({title : properListName}, function (err, list) {
+		if (err) 
+			res.send(err);
+		else if (!list) {
+			res.send('no such list found');
+		} else {
+			res.render('list', {
+				title : properListName,
+				list : list,
+				partials : {
+					header : 'header',
+					footer : 'footer'
+				}
+			});
+		}
+	});
+}
+
+// assumes list name is a string in 
+// format 'a-string-that-is-good-for-url'
+// assumes '-' is never at last index 
+function properizeListName (listName) {
+
+	// convert 'word' in '-word' to '-Word'
+	for (var i=0; i<listName.length; i++) {
+		var character = listName[i];
+		if (character === '-') {
+			// capitalize next character
+			listName = listName.substr(0, i+1) + listName[i+1].toUpperCase() + listName.substr(i+2);
+		}
+	}
+
+	// remove all '-' in 'word1-word2-word3'
+	while (listName.indexOf('-') != -1) 
+		listName = listName.replace('-', ' ');
+
+	return listName;
 }
 
 // sort lists by likes ind descending order
@@ -271,13 +329,14 @@ function createListPOST (req, res, next) {
 	list.save(function (err) {
 		if (err)
 			res.send(err);
-		else 
-			res.send(list);
-	});
-	
-	// res.send(formData);
+		else {
 
-	// res.send(list);
+			// after success saving, create a url for the list
+			// @ /lists/:listId
+
+			res.send(list);
+		}
+	});
 }
 
 function ratrIdGET (req, res, next) {

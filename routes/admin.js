@@ -59,7 +59,11 @@ router.get('/lists', function (req, res, next) {
 				lists : lists,
 
 				// show additinal data to admin
-				isAdmin : true
+				isAdmin : true,
+
+				partials : {
+					listsContainer : 'lists-container'
+				}
 			});
 		}
 	});

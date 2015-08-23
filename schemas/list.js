@@ -8,7 +8,7 @@ var ObjectId = Schema.ObjectId;
 var List = mongoose.model('List', new Schema ({
 	// basic information
 	id : ObjectId,
-	dataCreated: Date,
+	dateCreated: Date,
 	owner : String,
 
 	//* MAIN INFORMATION *//
