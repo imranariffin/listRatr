@@ -1,29 +1,48 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <title>{{ title }}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1>{{ title }}</h1>
+    <h1>{{ title }}</h1> -->
     
+{{>header}}
+
     <!-- signup form -->
-    <form action="/signup" method="POST">
-    	<!-- csrf for security -->
-    	<input type="hidden" name="_csrf" value="crsfToken">
+    <div class="panel panel-default">    
+        <form action="/signup" method="POST" style="">
+        	<!-- csrf for security -->
+        	<input type="hidden" name="_csrf" value="crsfToken">
 
-    	<!-- form data -->
-    	Email : <br>
-    	<input type="text" name="email"> <br>
-    	Password : <br>
-    	<input type="password" name="password"> <br>
-    	Confirm Password : <br>
-    	<input type="password" name="confirmPassword"> <br><br>
+        	<!-- form data -->
+            <br>
+            <div class="input-group" style="width:70%;left:15%">
+              <span class="input-group-addon" id="basic-addon1">@</span>
+              <input type="email" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
+            </div>
+            <br>
+            <div class="input-group" style="width:70%;left:15%">
+              <span class="input-group-addon" id="basic-addon2">***</span>
+              <input name="password" type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+            </div>
+            <br>
+            <div class="input-group" style="width:70%;left:15%">
+              <span class="input-group-addon" id="basic-addon3">***</span>
+              <input name="confirmPassword" type="password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon1">
+            </div>
+            <br>
+            <div class="input-group" style="width:30%;left:46%;">
+                <button type="submit" class="btn btn-default" style="width:inherit;">Submit</button>
+            </div>
+            <br>
+        	<!-- form submit -->
+        	<!-- <input type="submit" value="signup"> -->
+        </form>
+    </div>
 
-    	<!-- form submit -->
-    	<input type="submit" value="signup">
-    </form>
-
-
+<!-- 
   </body>
-</html>
+</html> -->
+
+{{>footer}}

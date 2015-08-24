@@ -85,7 +85,11 @@ function homeGET (req, res, next) {
 
 function signupGET (req, res, next) {
 	res.render('signup', { 
-		title: 'ListRatr - Signup' 
+		title: 'ListRatr - Signup',
+		partials : {
+			header : 'header',
+			footer : 'footer'
+		}
 	});
 }
 

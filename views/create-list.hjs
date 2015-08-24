@@ -9,12 +9,6 @@
 
   </head> -->
   {{>header}}
-  <body>
-    <h1>{{ title }}</h1>
-    <p> <h3>Create your list: </h3>
-	Make your list. Share it. View other lists. Rate em.
-    </p>
-
     <form action="/listrize" method="POST">
     <br>
   	<input id="article-url" class="form-control" type="text" name="url" aria-describedby="basic-addon1" placeholder="url of list-based article" id="list-title-input">
