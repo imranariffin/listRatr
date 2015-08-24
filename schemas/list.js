@@ -8,13 +8,15 @@ var ObjectId = Schema.ObjectId;
 var List = mongoose.model('List', new Schema ({
 	// basic information
 	id : ObjectId,
+	title : String,
 	dateCreated: Date,
 	owner : String,
 
 	//* MAIN INFORMATION *//
 
-	// 
-	title : String,
+	// unique url based on list title,
+	// title, however, does not have to be unique
+	url : String,
 	// array of items
 	items : [{
 		header : String,

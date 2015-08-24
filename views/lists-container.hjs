@@ -9,12 +9,11 @@
 	 	
 	 	<!-- <input type="hidden" name="listId" value="{{listId}}"> -->
     		<!-- <div id="likeId-{{_id}}" class="likedButton"> -->
-          <b>{{ title }} </b> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span id="likeValue-{{_id}}">{{ likes }} <br></span>
+          <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b> </a> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span id="likeValue-{{_id}}">{{ likes }} <br></span>
         <!-- </div> -->
   
 		<!-- </button> -->
     </div>
-
     	{{#isAdmin}}
 
     	title : {{ title }}
@@ -25,8 +24,7 @@
     	Votes : {{ votes }} <br>
     	Comments : {{ comments }} <br>
     	Likes : {{ likes }} <br>
-
-    	Items : {{ items }}
+    	Items : {{ items }} <br>
 
     	{{/isAdmin}}
 
@@ -34,34 +32,33 @@
     		<div style="background-color:blue;width:50px;height:50px;float:left"></div>
     		<div style="background-color:green;width:50px;height:50px;float:left"></div>
     	</div> -->
-		<div class="panel-body">
-			<br>
-			{{#items}}
-				<div class="panel panel-default">
+		<!-- <div class="panel-body"> -->
+		<!-- ... -->
+			<!-- <br> -->
+			<!-- {{#items}} -->
+				<!-- <div class="panel panel-default"> -->
 				<!-- {{.}} -->
-					<div class="panel-heading" style="overflow:hidden;">
-						<div style="height:100%;float:left">
+					<!-- <div class="panel-heading" style="overflow:hidden;"> -->
+<!-- 						<div style="height:100%;float:left">
 							<div class="arrow-up"></div>
 							<div class="netVote">0</div>						
 							<div class="arrow-down"></div>
 						</div>
     					<div style="height:100%;float:left;vertical-align:middle;text-align:center;display:table-cell;">
     						<div style="height:100%;vertical-align:middle;text-align:center;display:table-cell;">{{header}}</div>
-    					</div>
+    					</div> -->
 						 
-					</div>
+					<!-- </div> -->
 					<!-- <span class="vote"> </span> -->
 <!-- 					<button type="button" class="btn btn-default btn-vlg">
 					<div style="height:100px;width:100px">
 						<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 					</button>
 					</div> -->
-					<div class="panel-body">{{content}}</div>
-				</div>
-			{{/items}}
-		</div>    	
-	
+					<!-- <div class="panel-body">{{content}}</div> -->
+				<!-- </div> -->
+			<!-- {{/items}} -->
+		<!-- </div>    	 -->
 	</div>        	
-
     {{/lists}}
 </div>

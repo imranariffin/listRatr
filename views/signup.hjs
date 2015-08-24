@@ -1,15 +1,6 @@
-<!-- <!DOCTYPE html>
-<html>
-  <head>
-    <title>{{ title }}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1>{{ title }}</h1> -->
-    
 {{>header}}
-
     <!-- signup form -->
+<div id="main-div" style="width:65%;position:absolute;;left:17.5%;">    
     <div class="panel panel-default">    
         <form action="/signup" method="POST" style="">
         	<!-- csrf for security -->
@@ -33,16 +24,12 @@
             </div>
             <br>
             <div class="input-group" style="width:30%;left:46%;">
-                <button type="submit" class="btn btn-default" style="width:inherit;">Submit</button>
+                <button type="submit" class="btn btn-default" style="width:inherit;">signup</button>
             </div>
             <br>
         	<!-- form submit -->
         	<!-- <input type="submit" value="signup"> -->
         </form>
     </div>
-
-<!-- 
-  </body>
-</html> -->
-
+</div>
 {{>footer}}

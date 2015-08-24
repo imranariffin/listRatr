@@ -9,7 +9,8 @@
 
   </head> -->
   {{>header}}
-    <form action="/listrize" method="POST">
+ <div id="main-div" style="width:65%;position:absolute;;left:17.5%;">
+   	<form action="/listrize" method="POST">
     <br>
   	<input id="article-url" class="form-control" type="text" name="url" aria-describedby="basic-addon1" placeholder="url of list-based article" id="list-title-input">
   	<br>
@@ -51,6 +52,7 @@
 
 		<input type="submit" value="create List">
 	</form>
+</div>
 <!-- 
 
   </body>

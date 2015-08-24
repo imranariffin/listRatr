@@ -15,13 +15,16 @@
 	</div>
 	<div class="btn-group btn-group-justified" role="group" aria-label="...">
 	  <div class="btn-group" role="group">
+	    <a href="/"><button type="button" class="btn btn-default">ListRatr</button></a>
+	  </div>		
+	  <div class="btn-group" role="group">
 	    <a href="/lists"><button type="button" class="btn btn-default">View All Lists</button></a>
 	  </div>	
 	  <div class="btn-group" role="group">
 	    <a href="/createList"><button type="button" class="btn btn-default">Create New List</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
-	    <a href="/signin"><button type="button" class="btn btn-default">Login as a Ratr</button></a>
+	    <a href="/signin"><button type="button" class="btn btn-default">Signin as a Ratr</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
 		<a href="/signup"><button type="button" class="btn btn-default">Be a Ratr</button></a>	  

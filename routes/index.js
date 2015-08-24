@@ -123,7 +123,11 @@ function signupPOST (req, res, next) {
 
 function signinGET (req, res, next) {
 	res.render('signin', { 
-		title: 'ListRatr - Signin' 
+		title: 'ListRatr - Signin',
+		partials : {
+			header : 'header',
+			footer : 'footer'
+		}
 	});
 }
 
@@ -220,7 +224,8 @@ function getOneListByName (req, res, next) {
 			res.send('no such list found');
 		} else {
 			res.render('list', {
-				title : 'ListRatr - ' + properListName,
+				title : 'ListRatr',
+				listTitle : list.title,
 				list : list,
 				partials : {
 					header : 'header',
@@ -248,6 +253,9 @@ function properizeListName (listName) {
 	// remove all '-' in 'word1-word2-word3'
 	while (listName.indexOf('-') != -1) 
 		listName = listName.replace('-', ' ');
+
+	// // to lower case
+	// listName = listName.toLowerCase();
 
 	return listName;
 }
@@ -294,21 +302,6 @@ function createListPOST (req, res, next) {
 	// get form data
 	var formData = req.body;
 
-	// var listTitle = "3 Things to do before coding";
-	// var items = [{
-	// 	header : 'Drink Coffee',
-	// 	content : "Yo, you gotta this first. Coffee gives you spirit",
-	// 	scoreRank : 10
-	// }, {
-	// 	header : 'Open Powershell',
-	// 	content : "It simply powers you up and puts you on the right track",
-	// 	score : 6		
-	// }, {
-	// 	header : 'Open Sublime Text',
-	// 	content : "Sublime makes you actually start coding, really",
-	// 	score : 3		
-	// }];
-
 	// EXTRACT FORM DATA
 	var listTitle = formData.title;
 
@@ -324,31 +317,88 @@ function createListPOST (req, res, next) {
 		items.push(item);
 	}
 
+	// create unique url based on list name @ /lists/:listName
+	var url = createUrl(listTitle);
+	// formalize listTitle	
+	listTitle = formalizeTitle(listTitle);
+
 	var list = new List ({
 
 		// id : new ObjectId(),
-		dataCreated: new Date(),
+		dateCreated: new Date(),
 		owner : ratr._id,
 
 		//* MAIN INFORMATION *//
 		title : listTitle,
+		url : url,
 		// array of items
 		items : items,
 		// list's number of upvotes
 		votes : 0,
 	});
+
 	// save newly created list
 	list.save(function (err) {
 		if (err)
 			res.send(err);
 		else {
-
-			// after success saving, create a url for the list
-			// @ /lists/:listId
-
 			res.send(list);
 		}
 	});
+}
+
+/* Helper functions for createListPOST */
+
+function createUrl (listTitle) {
+	var SPACE = " ";
+	var HYPHEN = "-";
+	var url = '/lists';
+
+	// get rid of undefined strings ('')
+	// while replace SPACE with HYPHEN
+	// and lower case everything
+	listTitle.toLowerCase().split(SPACE)
+	.filter(function (word) {
+		if (word === '') 
+			return false;
+		else 
+			return true;
+	})
+	.map(function (e, i, arr) {
+		if (i < arr.length-1)
+			e += '-';
+		url += e;
+	});
+
+	console.log('url:');
+	console.log(url);
+
+	return url;
+}
+
+function formalizeTitle (listTitle) {
+	// #define
+	var COMMA = ',';
+	var SPACE = ' ';
+
+	var formalTitle = listTitle.split(SPACE)
+	.filter(function(word) {
+		if (word === '') 
+			return false;
+		else 
+			return true;
+	}).map(function (e, i, arr) {
+		return e[0].toUpperCase() + e.slice(1, e.length);
+	}).toString();
+
+	var temp = '';
+	for (i in formalTitle) {
+		var character = formalTitle[i];
+		temp += character.replace(COMMA, SPACE);
+	}
+	formalTitle = temp;
+
+	return formalTitle;
 }
 
 function ratrIdGET (req, res, next) {
