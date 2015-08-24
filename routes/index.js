@@ -74,7 +74,9 @@ function homeGET (req, res, next) {
 				lists : lists,
 				isAdmin : false,
 				partials : {
-					listsContainer : 'lists-container'
+					listsContainer : 'lists-container',
+					header : 'header',
+					footer : 'footer'
 				}
 			});
 		}
@@ -83,7 +85,7 @@ function homeGET (req, res, next) {
 
 function signupGET (req, res, next) {
 	res.render('signup', { 
-		title: 'Signup' 
+		title: 'ListRatr - Signup' 
 	});
 }
 
@@ -117,7 +119,7 @@ function signupPOST (req, res, next) {
 
 function signinGET (req, res, next) {
 	res.render('signin', { 
-		title: 'Signin' 
+		title: 'ListRatr - Signin' 
 	});
 }
 
@@ -188,7 +190,9 @@ function listsGET (req, res, next) {
 				lists : lists,
 				isAdmin : false,
 				partials : {
-					listsContainer : 'lists-container'
+					listsContainer : 'lists-container',
+					header : 'header',
+					footer : 'footer'
 				}
 			});
 		}
@@ -212,7 +216,7 @@ function getOneListByName (req, res, next) {
 			res.send('no such list found');
 		} else {
 			res.render('list', {
-				title : properListName,
+				title : 'ListRatr - ' + properListName,
 				list : list,
 				partials : {
 					header : 'header',
@@ -271,7 +275,11 @@ function CreateListGET (req, res, next) {
 
 	// render create list page
 	res.render('create-list', {
-		title : 'Create List'
+		title : 'ListRatr - Create List',
+		partials : {
+			header : 'header',
+			footer : 'footer-create-lists'
+		}
 	});
 }
 
@@ -360,7 +368,7 @@ function ratrIdGET (req, res, next) {
 			else 
 				// res.send(lists);
 				res.render('my-lists', {
-					title : 'My Lists',
+					title : 'ListRatr - My Lists',
 					lists : lists,
 					nLists : lists.length
 				});

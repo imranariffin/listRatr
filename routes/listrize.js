@@ -48,13 +48,94 @@ function listrize (req, res, next) {
 			// } else {
 			// 	res.send('err fail finding list');
 			// }
+			// var titleFound
+			// while ()
 
-			var list = findListByArticle($);
-			if (list) {
-				res.send(list);
-			} else {
-				res.send('fail finding list');
+function getTitle ($) {
+
+	// try first method: try <h9, h8, h7 ... h1> tags
+	var found = false;
+	title;
+	var i=9;
+	while (!found && i>0) {
+		$('div' + String(i)).filter(function () {
+			var data = $(this);
+
+			// TEST
+			if (data) {
+				console.log('data.text():');
+				console.log(data.text());
+				console.log('typeof(data):');
+				console.log(typeof(data));
 			}
+			console.log('i:');
+			console.log(i);
+
+			// res.send(data.toString());
+			if (data) {
+				if (data.text().indexOf('Want') != -1) {
+					// res.send('success: ' + data.text());
+					title = data.text();
+				}
+			}
+		});
+		i--;
+	}
+
+	console.log('\n');
+	console.log('title: ');
+	console.log(title);
+	console.log('\n');
+
+	// if title found, return. 
+	// Else, continue with other methods
+	if (title)
+		return title;
+
+	// second method: try <p class="title">
+	var selectors = ['div', 'p', 'title'];
+
+	for (i in selectors) {
+		var selector = selectors[i];
+		$(selector).filter(function () {
+			var data = $(this);
+
+			// TEST
+			console.log('\n\n');
+
+			console.log(selector);
+			console.log('\n\n');
+			if (data) {
+				console.log('data.text():');
+				console.log(data.text());
+				console.log('data:');
+				console.log(data);
+				console.log("data.attr('class'):");
+				console.log(data.attr('class'));
+			}
+
+			if (data) 
+				if (data.attr('class') === 'title' && data.text().indexOf('Want') != -1) 
+					title = data.text();
+		});
+	}
+}
+
+			var title = getTitle ($);
+
+			if (title)
+				res.send(title);
+			else
+				res.send('err: cannot find title');
+
+			// res.send('typeofz');
+
+			// // var list = findListByArticle($);
+			// if (list) {
+			// 	res.send(list);
+			// } else {
+			// 	res.send('fail finding list');
+			// }
 
 
 		} else if (err) {
@@ -68,6 +149,11 @@ function listrize (req, res, next) {
 }
 
 module.exports = router;
+
+
+function titleFinder (selector, callback) {
+
+}
 
 ////////////////////////
 /* SCRAPING FUNCTIONS */
@@ -115,19 +201,14 @@ function findList ($) {
 
 function findListByArticle ($) {
 
-	var title;
+	var jsonBody, title;
 	var i=0;
-	while (!title && i<7) {
-		title = $('article').find('h' + String(i));
-
-		i++;
-	}
 
 	if (!title) {
 		return undefined;
 	} else {
 		// proceed to getting of list items
-		return title;
+		return String(title);
 	}
 
 }

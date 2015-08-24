@@ -1,44 +1,11 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>{{ title }}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-    <link rel='stylesheet' href='/stylesheets/new-style.css' />
-  </head>
-  <body style="margin-top:-45px;background-color:white;">
-    <h2 style="text-align:center;">{{ title }}</h2>
-    <p style="text-align:center;">Make your list. Share it. View other lists. Rate em.
-    </p>
-
-    <!-- <div style="border:1px solid black;width:500px;">
-	    <ul class="nav nav-pills">
-		  <li role="presentation" class="active" style="border:1px solid black;text-align:center"><a href="#">Home</a></li>
-		  <li role="presentation" style="border:1px solid black;text-align:center"><a href="#">Profile</a></li>
-		  <li role="presentation" style="border:1px solid black;text-align:center"><a href="#">Messages</a></li>
-		</ul>
-	</div> -->
-	<div class="btn-group btn-group-justified" role="group" aria-label="...">
-	  <div class="btn-group" role="group">
-	    <a href="/lists"><button type="button" class="btn btn-default">View All Lists</button></a>
-	  </div>	
-	  <div class="btn-group" role="group">
-	    <a href="/createList"><button type="button" class="btn btn-default">Create New List</button></a>
-	  </div>
-	  <div class="btn-group" role="group">
-	    <a href="/signin"><button type="button" class="btn btn-default">Login as a Ratr</button></a>
-	  </div>
-	  <div class="btn-group" role="group">
-		<a href="/signup"><button type="button" class="btn btn-default">Be a Ratr</button></a>	  
-	  </div>
-	</div>	
-
-	<br>
+{{>header}}
 <!-- 	<h4 style="text-align:center">Top Lists:</h4> -->
 
 {{>listsContainer}}
-
+<!-- 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="/javascripts/lists-scripts.js"></script>
   </body>
-</html>
+</html> -->
+
+{{>footer}}
