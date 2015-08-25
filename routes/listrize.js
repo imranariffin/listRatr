@@ -23,7 +23,8 @@ function listrize (req, res, next) {
 	var url = req.body.url;
 	var articleHomePage = getHomePage(url);
 	var title;
-	var items;
+	var headers;
+	var contents;
 
 	request (url, function (err, response, body) {
 		if (!err && response.statusCode === 200)  {
@@ -40,14 +41,19 @@ function listrize (req, res, next) {
 			if (articleHomePage === websites['narcity']) {
 				// user narcity method to get listTitle and listItems
 				title = getNarcityTitle($);
-				items = getNarcityHeaders($);
+				headers = getNarcityHeaders($);
+
+				console.log('headers:');
+				console.log(headers);
+
+				contents = getNarcityContents($, headers);
 
 				// change items to an object to include
-				items = items.map(function (e, i, arr) {
+				items = headers.map(function (e, i, arr) {
 					return {
 						index : i,
 						heading : e,
-						content : 'List Content'
+						content : contents[i]
 					};
 				});
 
@@ -111,20 +117,9 @@ function getNarcityHeaders ($) {
 	length = $('.article__content').find('h3')
 	.each(function (i, e) {
 		length = $(this).length;
-		// console.log('$(e):');		
-		// console.log($(e));
-		// var item = $(e).text();
-		// items.push(item);
-		// console.log('length:');
-		// console.log(length);
 
 		$(e).filter(function () {
-
 			var data = $(this);
-			console.log('data.text():');
-			console.log(data.text());
-			// console.log('data:');
-			// console.log(data);
 			if (data.text() != "" && items.indexOf(data.text()) === -1) 
 				items.push(data.text());
 		});
@@ -132,15 +127,62 @@ function getNarcityHeaders ($) {
 		return ($(this).text() != "");
 	}).length;
 
-	console.log('length:');
-	console.log(length);
-	console.log('items.length:');
-	console.log(items.length);
-	console.log('items:');
-	console.log(items);
-
 	if (items.length === length)
 		return items;
+}
+
+function getNarcityContents ($, narcityHeaders) {
+	console.log('\nIN FUNCTION: getNarcityContents():\n');
+	var contents = [], length;
+	length = $('.article__content').find('h3')
+	.each(function (i, e) {
+		length = $(this).length;
+
+		console.log('$(e).text():');
+		console.log($(e).text());
+		// console.log('$(e).next(p):');
+		// console.log($(e).next('p'));
+		console.log('$(e).next(p)[0].text():');
+		console.log($(e).next('p').text());
+
+		$(e).next('p').filter(function () {
+			var data = $(this);
+
+			console.log('data.text():');
+			console.log(data.text());
+
+			if (data.text().indexOf("Photo cred") === -1 && contents.indexOf(data.text()) === -1) 
+				contents.push(data.text());
+		});	
+	}).filter(function () {
+		return ($(this).next('p').text().indexOf("Photo cred") === -1);
+	}).length;
+
+	console.log('length:');
+	console.log(length);
+
+	console.log('\ncontents:');
+	console.log(contents);
+	console.log('contents.length:');
+	console.log(contents.length);
+	console.log('\n');
+
+	if (contents.length === length)
+		return contents;
+	// console.log('$(narcityHeaders)[i]:');
+	// console.log($(narcityHeaders)[0]);
+
+	// length = $(narcityHeaders)[0].filter(function (i, content) {
+	// 	console.log('content:');
+	// 	console.log(content);
+	// 	contents.push($($(content).next()).text());
+	// }).length;
+
+	// console.log('length:');
+	// console.log(length);
+
+	// if (contents.length === length)
+	// 	return contents;
 }
 
 }
