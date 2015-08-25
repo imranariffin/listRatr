@@ -40,16 +40,42 @@ function listrize (req, res, next) {
 			if (articleHomePage === websites['narcity']) {
 				// user narcity method to get listTitle and listItems
 				title = getNarcityTitle($);
-				items = getNarcityItems($);
+				items = getNarcityHeaders($);
 
-				var response = {
-					articleHomePage : articleHomePage,
+				// change items to an object to include
+				items = items.map(function (e, i, arr) {
+					return {
+						index : i,
+						heading : e,
+						content : 'List Content'
+					};
+				});
+
+				// var response = {
+				// 	articleHomePage : articleHomePage,
+				// 	title : title,
+				// 	items : items
+				// };
+
+				var list = {
 					title : title,
-					items : items
+					items : items,
+					listSize : items.length
 				};
 
+				res.render('create-list-auto', {
+					// main data
+					list : list,
+
+					// 
+					partials : {
+						header : 'header',
+						footer : 'footer-create-lists'
+					}
+				});
+
 				// res.send(title);
-				res.send(response);
+				// res.send(response);
 			} else {
 				res.send('not narcity');
 			}
@@ -79,8 +105,8 @@ function getNarcityTitle ($) {
 		return title;
 }
 
-function getNarcityItems ($) {
-	console.log('\nIN FUNCTION: getNarcityItems():\n');
+function getNarcityHeaders ($) {
+	console.log('\nIN FUNCTION: getNarcityHeaders():\n');
 	var items = [], length;
 	length = $('.article__content').find('h3')
 	.each(function (i, e) {

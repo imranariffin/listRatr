@@ -1,13 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-  <head>
-    <title>{{ title }}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="/javascripts/create-lists-scripts.js"></script>
-
-  </head> -->
   {{>header}}
  <div id="main-div" style="width:65%;position:absolute;;left:17.5%;">
    	<form action="/listrize" method="POST">
@@ -27,34 +17,26 @@
 			  <div id="list-title">
 			  	<h2>List Title</h2>
 			  </div>
-
 		  </div>
-<!-- 		  <div class="panel-body"> -->
-<!-- 		    <p>...</p> -->
 			<!-- List group -->
 			<ul class="list-group">
-<li class="list-group-item" id="list-group-item0"><div class="panel panel-default" id="panel0"><div class="panel-heading" id="panel-heading0"><input type="text" class="input-text" id="input-text-title0" name="panelTitle" style="display: none;"><!-- <input type="text" class="input-text" id="input-text-title-0" name="panelTitle" style=""> --><h3 id="panel-title0" class="panel-title">Panel title 1</h3></div><div class="panel-body" id="panel-body0"><textarea class="input-text" id="input-text0" name="panelBody" style="display: none;"></textarea><div class="item-content" id="item-content0">Item Body 1</div></div></div></li>			
-				<!-- <li class="list-group-item" id="0-item">1. first item
-			    	<input class="input-text" type="text" name="items">
-			    </li> -->
+				<li class="list-group-item" id="list-group-item0">
+					<div class="panel panel-default" id="panel0"><div class="panel-heading" id="panel-heading0">
+						<input type="text" class="input-text" id="input-text-title0" name="panelTitle" style="display: none;">
+						<h3 id="panel-title0" class="panel-title">Panel title 1</h3>
+					</div>
+					<div class="panel-body" id="panel-body0">
+						<textarea class="input-text" id="input-text0" name="panelBody" style="display: none;"></textarea>
+						<div class="item-content" id="item-content0">Item Body 1</div>
+					</div>
+				</li>
 			</ul>		    
-		  <!-- </div> -->
 		</div>
-		<!--   <div class="panel-heading">
-		  	
-		  </div> -->
 
 		<button type="button" class="btn btn-default btn-lg" id="btn-additem">
 		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add item
 		</button>		  
-
-		
-
 		<input type="submit" value="create List">
 	</form>
 </div>
-<!-- 
-
-  </body>
-</html> -->
 {{>footer}}

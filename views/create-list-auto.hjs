@@ -1,0 +1,60 @@
+{{>header}}
+<div id="main-div" style="width:65%;position:absolute;;left:17.5%;">
+   	<form action="/listrize" method="POST">
+    	<br>
+	  	<input id="article-url" class="form-control" type="text" name="url" aria-describedby="basic-addon1" placeholder="url of list-based article" id="list-title-input">
+  		<br>
+  	</form>
+
+{{#list}}
+    <form actions="/createList" method="POST">
+    	<input id="listSize" type="hidden" name="listSize" value="{{listSize}}">
+		<div class="panel panel-default">
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">
+			  <div class="" s="input-group">
+			  <input class="form-control" type="text" name="title" aria-describedby="basic-addon1" placeholder="List Title" id="list-title-input" value="{{title}}">
+			  </div>
+			  <div id="list-title">
+			  	<h2>{{title}}</h2>
+			  </div>
+		  </div>
+			<!-- List group -->
+			<ul class="list-group">
+
+			{{#items}}
+				<li class="list-group-item" id="list-group-item{{index}}">
+					<div class="panel panel-default" id="panel{{index}}"><div class="panel-heading" id="panel-heading{{index}}">
+						<input type="text" class="input-text" id="input-text-title{{index}}" name="panelTitle" style="display: none;" value="{{heading}}">
+						<h3 id="panel-title{{index}}" class="panel-title">{{heading}}</h3>
+					</div>
+					<div class="panel-body" id="panel-body{{index}}">
+						<textarea class="input-text" id="input-text{{index}}" name="panelBody" style="display: none;" value="{{content}}"></textarea>
+						<div class="item-content" id="item-content{{index}}">{{content}}</div>
+					</div>
+				</li>
+			{{/items}}
+			</ul>		    
+		</div>
+
+		<button type="button" class="btn btn-default btn-lg" id="btn-additem">
+		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add item
+		</button>		  
+		<input type="submit" value="create List">
+	</form>
+{{/list}}
+</div>
+
+<!-- 
+<script type="text/javascript">
+// $(function () {
+
+// 	for (var i=0; i<={{listSize+1}}; i++) {
+// 		createListItemWithPanel(i);
+// 		console.log('logzzz');
+// 	}
+
+// });
+</script>
+ -->
+{{>footer}}
