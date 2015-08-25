@@ -122,6 +122,8 @@ function getNarcityHeaders ($) {
 			var data = $(this);
 			if (data.text() != "" && items.indexOf(data.text()) === -1) 
 				items.push(data.text());
+			// else if (items.indexOf(data.text()) === -1)
+			// 	items.push("err");
 		});
 	}).filter(function() {
 		return ($(this).text() != "");
@@ -142,18 +144,60 @@ function getNarcityContents ($, narcityHeaders) {
 		console.log($(e).text());
 		// console.log('$(e).next(p):');
 		// console.log($(e).next('p'));
-		console.log('$(e).next(p)[0].text():');
+		console.log('$(e).next(p).text():');
 		console.log($(e).next('p').text());
 
-		$(e).next('p').filter(function () {
-			var data = $(this);
+		console.log("$(e).next('p').hasOwnProperty('filter'):");
+		console.log($(e).next('p').hasOwnProperty('filter'));
+		console.log("typeof($(e).next('p'))");		
+		console.log(typeof($(e).next('p')));
+		console.log("$(e).next('p').text():");
+		console.log($(e).next('p').text());
+		console.log("$(e).next('p').text().length:");
+		console.log($(e).next('p').text().length);		
+		console.log('$(e).parent().is(div)?');
+		if ($(e).parent().is('div'))
+			console.log('yes, is div!');
+		else
+			console.log('nope, not div!');
+		console.log('$(e).parent().is(li)?');
+		if ($(e).parent().is('li'))
+			console.log('yes, is li!');
+		else
+			console.log('nope, not li!');
+		// console.log("$(e).next('p'):");
+		// console.log($(e).next('p'));
 
-			console.log('data.text():');
-			console.log(data.text());
+		// TEST
+		if ($(e).next('p').text() === null)
+			console.log('is null');
+		if ($(e).next('p').text() === '')
+			console.log('is exactly empty string');
+		if ($(e).next('p').text() == '')
+			console.log('is sorta empty string');
+		if ($(e).next('p').text() === undefined)
+			console.log('is undefined');
+		if ($(e).next('p').text().length === 0)
+			console.log('is of length 0');
+		if (typeof($(e).next('p').text()) === 'string')
+			console.log('is of type of string');
 
-			if (data.text().indexOf("Photo cred") === -1 && contents.indexOf(data.text()) === -1) 
-				contents.push(data.text());
-		});	
+		if (($(e).next('p').text() === '' || $(e).next('p').text().length === 0)
+			&& ($(e).parent().is('li')))
+			contents.push('err');
+		else {
+			$(e).next('p').filter(function () {
+				console.log("\nINSIDE: " + $(e).next('p').text() + " .filter()\n");
+				var data = $(this);
+
+				console.log('data.text():');
+				console.log(data.text());
+
+				if (data.text().indexOf("Photo cred") === -1 && contents.indexOf(data.text()) === -1) 
+					contents.push(data.text());
+			});				
+		}
+
 	}).filter(function () {
 		return ($(this).next('p').text().indexOf("Photo cred") === -1);
 	}).length;
@@ -167,8 +211,8 @@ function getNarcityContents ($, narcityHeaders) {
 	console.log(contents.length);
 	console.log('\n');
 
-	if (contents.length === length)
-		return contents;
+	// if (contents.length === length)
+	return contents;
 	// console.log('$(narcityHeaders)[i]:');
 	// console.log($(narcityHeaders)[0]);
 

@@ -24,6 +24,7 @@
     	Votes : {{ votes }} <br>
     	Comments : {{ comments }} <br>
     	Likes : {{ likes }} <br>
+    	Url : {{ url }} <br>
     	Items : {{ items }} <br>
 
     	{{/isAdmin}}

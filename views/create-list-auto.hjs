@@ -7,7 +7,7 @@
   	</form>
 
 {{#list}}
-    <form actions="/createList" method="POST">
+    <form action="/createList" method="POST">
     	<input id="listSize" type="hidden" name="listSize" value="{{listSize}}">
 		<div class="panel panel-default">
 		  <!-- Default panel contents -->
@@ -29,7 +29,7 @@
 						<h3 id="panel-title{{index}}" class="panel-title">{{heading}}</h3>
 					</div>
 					<div class="panel-body" id="panel-body{{index}}">
-						<textarea class="input-text" id="input-text{{index}}" name="panelBody" style="display: none;" value="{{content}}"></textarea>
+						<textarea class="input-text" id="input-text{{index}}" name="panelBody" style="display: none;">{{content}}</textarea>
 						<div class="item-content" id="item-content{{index}}">{{content}}</div>
 					</div>
 				</li>

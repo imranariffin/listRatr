@@ -241,6 +241,9 @@ function getOneListByName (req, res, next) {
 // assumes '-' is never at last index 
 function properizeListName (listName) {
 
+	// always capitalize first letter
+	listName = listName[0].toUpperCase() + listName.slice(1, listName.length);
+
 	// convert 'word' in '-word' to '-Word'
 	for (var i=0; i<listName.length; i++) {
 		var character = listName[i];
@@ -352,7 +355,7 @@ function createListPOST (req, res, next) {
 function createUrl (listTitle) {
 	var SPACE = " ";
 	var HYPHEN = "-";
-	var url = '/lists';
+	// var url = '/lists';
 
 	// get rid of undefined strings ('')
 	// while replace SPACE with HYPHEN
