@@ -11,6 +11,7 @@ var ObjectId = mongoose.Schema.ObjectId;
 var request = require('request');
 var cheerio = require('cheerio');
 
+var websites = { narcity : 'www.narcity.com'};
 /* GET home page. */
 router.post('/', listrize);
 
@@ -20,72 +21,154 @@ router.post('/', listrize);
 function listrize (req, res, next) {
 
 	var url = req.body.url;
+	var articleHomePage = getHomePage(url);
+	var title;
+	var items;
 
 	request (url, function (err, response, body) {
 		if (!err && response.statusCode === 200)  {
 			// good
-			// res.send(body);
 
 			var $ = cheerio.load(body);
+			// var title = getTitle ($);
 
-			// var title = findTitle($);
-			// if (title) {
-			// 	// // find lists
-			// 	// var lists = findLists($);
-			// 	// if (lists) {
-			// 	// 	res.send('success');
-			// 	// } else {
-			// 	// 	res.send('err: cannot find lists');
-			// 	// }
-			// 	res.send('success findTitle: title = ' + title);
-			// } else {
-			// 	res.send('err: cannot find title');
-			// }
+			console.log('articleHomePage:');
+			console.log(articleHomePage);
 
-			// var list = findList ($);
-			// if (list) {
-			// 	res.send(list);
-			// } else {
-			// 	res.send('err fail finding list');
-			// }
-			// var titleFound
-			// while ()
+			// if narcity.com, user narcity method
+			// if (articleHomePage === websites['narcity']) {
+			if (articleHomePage === websites['narcity']) {
+				// user narcity method to get listTitle and listItems
+				title = getNarcityTitle($);
+				items = getNarcityItems($);
+
+				var response = {
+					articleHomePage : articleHomePage,
+					title : title,
+					items : items
+				};
+
+				// res.send(title);
+				res.send(response);
+			} else {
+				res.send('not narcity');
+			}
+		} else {
+			res.send(err);
+		}
+	});
+
+function getHomePage (fullUrl) {
+	return fullUrl.split('/').filter(function (character) {
+		return (character != "" && character != 'http:');
+	})[0];
+}
+
+function getNarcityTitle ($) {
+	var title;
+	console.log('\nIN FUNCTION: getNarcityTitle():\n');
+	$('h1').filter(function () {
+		var data = $(this);
+		if (data.attr('class') === 'article__title') {
+			title = data.text();
+			console.log('title:');
+			console.log(title);
+		}
+	});
+	if (title)
+		return title;
+}
+
+function getNarcityItems ($) {
+	console.log('\nIN FUNCTION: getNarcityItems():\n');
+	var items = [], length;
+	length = $('.article__content').find('h3')
+	.each(function (i, e) {
+		length = $(this).length;
+		// console.log('$(e):');		
+		// console.log($(e));
+		// var item = $(e).text();
+		// items.push(item);
+		// console.log('length:');
+		// console.log(length);
+
+		$(e).filter(function () {
+
+			var data = $(this);
+			console.log('data.text():');
+			console.log(data.text());
+			// console.log('data:');
+			// console.log(data);
+			if (data.text() != "" && items.indexOf(data.text()) === -1) 
+				items.push(data.text());
+		});
+	}).filter(function() {
+		return ($(this).text() != "");
+	}).length;
+
+	console.log('length:');
+	console.log(length);
+	console.log('items.length:');
+	console.log(items.length);
+	console.log('items:');
+	console.log(items);
+
+	if (items.length === length)
+		return items;
+}
+
+}
+
+module.exports = router;
+
+
+function titleFinder (selector, callback) {
+
+}
+
+////////////////////////
+/* SCRAPING FUNCTIONS */
+////////////////////////
+
+// find title of html page
+// input $ is of cheerio.load(htmlFIle) type
+function findTitle ($) {
+	var $title, title;
+
+	// find by tag <title>
+	$title = $('title');
+	if ($title) {
+		return $title.text();
+	}
+
+	// if that doesn't work
+	// find by other strategies
+
+	// if every strategy doesn't work, return undefined
+	else {
+		return undefined;
+	}
+}
 
 function getTitle ($) {
+	console.log('\nIN FUNCTION: getTitle():\n');
 
 	// try first method: try <h9, h8, h7 ... h1> tags
 	var found = false;
-	title;
+	var title;
 	var i=9;
 	while (!found && i>0) {
 		$('div' + String(i)).filter(function () {
 			var data = $(this);
 
-			// TEST
-			if (data) {
-				console.log('data.text():');
-				console.log(data.text());
-				console.log('typeof(data):');
-				console.log(typeof(data));
-			}
-			console.log('i:');
-			console.log(i);
-
-			// res.send(data.toString());
 			if (data) {
 				if (data.text().indexOf('Want') != -1) {
-					// res.send('success: ' + data.text());
 					title = data.text();
 				}
 			}
 		});
 		i--;
 	}
-
-	console.log('\n');
-	console.log('title: ');
-	console.log(title);
-	console.log('\n');
 
 	// if title found, return. 
 	// Else, continue with other methods
@@ -118,64 +201,6 @@ function getTitle ($) {
 				if (data.attr('class') === 'title' && data.text().indexOf('Want') != -1) 
 					title = data.text();
 		});
-	}
-}
-
-			var title = getTitle ($);
-
-			if (title)
-				res.send(title);
-			else
-				res.send('err: cannot find title');
-
-			// res.send('typeofz');
-
-			// // var list = findListByArticle($);
-			// if (list) {
-			// 	res.send(list);
-			// } else {
-			// 	res.send('fail finding list');
-			// }
-
-
-		} else if (err) {
-			// bad
-			res.send(err);
-		} else {
-			// worse
-			res.send(response);
-		}
-	});
-}
-
-module.exports = router;
-
-
-function titleFinder (selector, callback) {
-
-}
-
-////////////////////////
-/* SCRAPING FUNCTIONS */
-////////////////////////
-
-// find title of html page
-// input $ is of cheerio.load(htmlFIle) type
-function findTitle ($) {
-	var $title, title;
-
-	// find by tag <title>
-	$title = $('title');
-	if ($title) {
-		return $title.text();
-	}
-
-	// if that doesn't work
-	// find by other strategies
-
-	// if every strategy doesn't work, return undefined
-	else {
-		return undefined;
 	}
 }
 
