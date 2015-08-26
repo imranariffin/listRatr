@@ -10,6 +10,8 @@ var ObjectId = mongoose.Schema.ObjectId;
 /* GET home page. */
 router.get('/', homeGET);
 
+router.get('/ratr/:ratrId', getRatr);
+
 /* GET signup page. */
 router.get('/signup', signupGET);
 
@@ -87,6 +89,17 @@ function homeGET (req, res, next) {
 			});
 		}
 	});	
+}
+
+function getRatr (req, res, next) {
+	var ratrId = req.params.ratrId;
+	ListRatr.findById(ratrId, function (err, ratr) {
+		if (err)
+			res.send(err);
+		else {
+			res.send(ratr);
+		}
+	});
 }
 
 function signupGET (req, res, next) {
@@ -260,7 +273,7 @@ function getOneListByName (req, res, next) {
 						console.log(itemId + ' voted down');
 						upVotes.push(false);
 						downVotes.push(true);
-						item.up = false;
+						item.up = false;	
 						item.down = true;
 					}
 					listItems.push(item);

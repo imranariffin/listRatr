@@ -20,6 +20,30 @@ $(function () {
       console.log('$(this):');
       console.log($(this));
     });
+
+    // update poster information: get poster username and display it
+    var ratrId = getRatrIdFromListPoster($('.list-poster').text());
+    console.log('\n\n\n\n\nratrId:');
+    console.log(ratrId);
+    console.log('\n\n\n\n\n');
+    $.ajax({
+      type : 'GET',
+      url : '/ratr/' + ratrId,
+      data : {},
+      success : function (data) {
+        console.log('success upvote');
+        console.log('data:');
+        console.log(data);
+        $('.list-poster').text('posted by ' + data.email);
+      },
+      error : function (data) {
+        console.log('\n\nerr: data:');
+        console.log(data);
+        console.log('\n');
+      },
+      dataType : 'json'
+    });
+
   });
 
   $('.share-link').hide();
@@ -238,6 +262,12 @@ $(function () {
   // $('arrow-up').click()
 
 });
+
+function getRatrIdFromListPoster (listPosterVal) {
+  console.log('listPosterVal:');
+  console.log(listPosterVal);
+  return listPosterVal.slice('posted by '.length, listPosterVal.length);
+}
 
 // likeId is a string = event.target.id
 // returns a string id. 
