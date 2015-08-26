@@ -27,6 +27,17 @@ var ListRatr = mongoose.model('ListRatr', new Schema ({
 		up : [ObjectId],
 		// array of listId listratr has updvoted
 		down : [ObjectId]
+	},
+
+	// ouath information
+	facebook  : {
+	        isLinked : {
+	        	type : Boolean,
+	        	default : false
+	        },
+	        profile : Object,
+	        accessToken : String,
+	        refreshToken : String
 	}
 }));
 

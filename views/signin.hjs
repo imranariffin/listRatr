@@ -20,10 +20,12 @@
             <div class="input-group" style="width:30%;left:46%;">
                 <button type="submit" class="btn btn-default" style="width:inherit;">signin</button>
             </div>
-            <br>
             <!-- form submit -->
             <!-- <input type="submit" value="signup"> -->
         </form>
+        <hr>
+        <a href="/auth/facebook/"><img style="width:20%;position:relative;left:41%" src="/images/facebook-login.png"></a>
+        <br><br>
     </div>
 </div>
 {{>footer}}

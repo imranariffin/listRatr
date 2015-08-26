@@ -35,8 +35,13 @@
 
 		<button type="button" class="btn btn-default btn-lg" id="btn-additem">
 		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add item
-		</button>		  
-		<input type="submit" value="create List">
+		</button>
+		<div class="btn-group btn-group-justified" role="group" aria-label="...">
+		  <div class="btn-group" role="group">
+		    <input type="submit" value="submit"class="btn btn-default">
+		  </div>
+		</div>
+		<!-- <input type="submit" value="create List"> -->
 	</form>
 </div>
 {{>footer}}

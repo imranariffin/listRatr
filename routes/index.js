@@ -231,17 +231,14 @@ function getOneListByName (req, res, next) {
 			res.send('no such list found');
 		} else {
 
-			// updates list.items.upVoted and .downVoted to true
-			// if ratr has oredy liked
-			console.log(ratr.email);
-			console.log(ratr.votes);
-
 			var upVotes = [];
 			var downVotes = [];
 			var listItems = [];
 
 			if (ratr)
 				list.items.forEach(function (e, i, arr) {
+					console.log(ratr);
+					console.log(ratr.votes);
 					var itemId = String(e._id);
 					var item = {
 						header : e.header,
@@ -251,15 +248,7 @@ function getOneListByName (req, res, next) {
 						up : false,
 						down : false
 					};
-					// console.log('in list.items[]:');
-					// console.log('e._id:');
-					// console.log(e._id);
-					// console.log('typeof(e._id):');
-					// console.log(typeof(e._id));
-					// console.log('ratr.votes.up.indexOf(e._id):');
-					// console.log(ratr.votes.up.indexOf(e._id));
-					// console.log('ratr.votes.down.indexOf(e._id):');
-					// console.log(ratr.votes.down.indexOf(e._id));
+
 					if (ratr.votes.up.indexOf(itemId) != -1) {
 						console.log(itemId + ' voted up');
 						upVotes.push(true);
@@ -276,7 +265,8 @@ function getOneListByName (req, res, next) {
 					}
 					listItems.push(item);
 				});
-
+			else
+				listItems = list.items;
 
 			console.log('\nlistItems:');
 			console.log(listItems);

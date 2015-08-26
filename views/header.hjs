@@ -7,9 +7,9 @@
     <link rel='stylesheet' href='/stylesheets/new-style.css' />
     <link rel='icon' href='/images/ListRatr_Logo.png' />
   </head>
-<body style="margin-top:-45px;background-color:white;">
+<body style="margin-top:-50px;background-color:#fffee3;">
 	<div style="height:10%;">
-	    <a href="/" style="text-decoration:none;"><h2 style="text-align:center;color:#009900;" href="/">{{ title }}</h2></a>
+	    <a href="/" style="text-decoration:none;"><h3 style="text-align:center;color:#009900;" href="/">{{ title }}</h3></a>
 	    <p style="text-align:center;"><bold style="color:#ff8c00">Make your list.</bold> <bold style="color:;">Share it.</bold> <bold style="color:#ff8c00">View other lists.</bold> <bold style="color:#;">Rate em.</bold>
 	    </p>
 	</div>
@@ -24,10 +24,10 @@
 	    <a href="/createList"><button type="button" class="btn btn-default">Create New List</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
-	    <a href="/signin"><button type="button" class="btn btn-default">Signin as a Ratr</button></a>
+	    <a href="/signin"><button type="button" class="btn btn-default"><img style="height:60%;width:5%;" src="/images/facebook_logo_detail_small.png">&nbsp Signin as a Ratr</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
-		<a href="/signup"><button type="button" class="btn btn-default">Be a Ratr</button></a>	  
+		<a href="/signup"><button type="button" class="btn btn-default"><img style="height:60%;width:5%;" src="/images/facebook_logo_detail_small.png">&nbsp Be a Ratr</button></a>	  
 	  </div>
 	</div>	
 	<br>

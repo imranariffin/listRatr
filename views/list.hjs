@@ -7,7 +7,7 @@
 		<div class="panel panel-default">    
 		 	<!-- Default panel contents -->
 		 	<div class="panel-heading">
-	          <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b></a> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span id="likeValue-{{_id}}">{{ likes }} </span><span class="btn-share" id="btn-share-{{_id}}" style="color:grey;">share</span> <span class="share-link" id="share-link-{{_id}}">dummy link</span>
+	          <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b></a> <br> <span id="likeValue-{{_id}}">{{ likes }} </span> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> | <span class="btn-share" id="btn-share-{{_id}}" style="color:grey;">share</span> <span class="share-link" id="share-link-{{_id}}">dummy link</span>
 	    </div>
 			<div class="panel-body">
 				<br>

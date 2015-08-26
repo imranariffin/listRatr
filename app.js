@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var sessions = require('client-sessions');
+var passport = require('passport');
+// custom functions
+var setupPassport = require('./functions/setupPassport');
 
 var mongoose = require('mongoose');
 var ListRatr = require('./schemas/listratr');
@@ -32,6 +35,8 @@ mongoose.connect(MONGO_URI, function (err) {
   }
 });
 
+setupPassport(app, passport);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
@@ -43,6 +48,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //oauth session
@@ -60,6 +67,19 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/admin', admin);
 app.use('/listrize', listrize);
+
+app.get('/auth/facebook', passport.authenticate('facebook', { 
+  scope : 'email' 
+}), function (req, res) {
+  res.redirect('/');
+}
+);
+
+app.get('/auth/facebook/callback', 
+  passport.authenticate('facebook'), 
+  // redirectToDashboard
+  redirectToMain
+);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -128,4 +148,41 @@ function updateSession (req, res, next) { //user next() for next middleware
     console.log('req.session or req.session.user is false');
     next();
   }
+}
+
+// function redirectToDashboard (req, res) {
+function redirectToMain (req, res) {
+
+  console.log('redirecting to main');
+  // console.log('res: ' + res);
+  // console.log('req: ' + req);
+  console.log(req.ratr.email);
+
+  ListRatr.findOne({ email : req.user.emails[0].value }, function (err, ratr) {
+    if (!err) {
+      if (ratr) {
+        req.session.ratr = ratr;
+        console.log('req.session.ratr:');
+        console.log(req.session.ratr);
+        console.log('redirect to main');
+        // res.redirect('/dashboard');
+        res.redirect('/');
+      } else {
+        console.log('error: no user found');
+        // res.send('error: no user found');
+        // no user found, therefore create one using req.session
+        var ratr = req.session.ratr;
+
+        ratr.save(function (err) {
+          if (err)
+            res.send(err);
+          else
+            res.send(ratr);
+        });
+      }
+    } else {
+      console.log('Error: ' + err);
+      res.send('Error: ' + err);
+    }
+  });
 }
