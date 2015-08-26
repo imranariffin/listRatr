@@ -9,7 +9,7 @@
   </head>
 <body style="margin-top:-50px;background-color:#fffee3;">
 	<div style="height:10%;">
-	    <a href="/" style="text-decoration:none;"><h3 style="text-align:center;color:#009900;" href="/">{{ title }}</h3></a>
+	    <a href="/" style="text-decoration:none;"><h3 style="text-align:center;color:#009900;" href="/">{{ title }}<span style="font-size:15px;">{{xyz}}</span></h3></a>
 	    <p style="text-align:center;"><bold style="color:#ff8c00">Make your list.</bold> <bold style="color:;">Share it.</bold> <bold style="color:#ff8c00">View other lists.</bold> <bold style="color:#;">Rate em.</bold>
 	    </p>
 	</div>

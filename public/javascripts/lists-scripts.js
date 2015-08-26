@@ -21,6 +21,61 @@ $(function () {
       console.log($(this));
     });
 
+    $('.form-control').bind("enterKey", function (e) {
+       // update comments view field, 
+       // then update comments to db
+
+       var commentsText = e.target.value;
+       var commentId = e.target.id;
+       var commentId = getCommentIdFromInput(commentId);
+
+       var listId = $('#listId').val();
+
+       // TEST
+       console.log('commentId:');
+       console.log(commentId);
+       console.log('listId:');
+       console.log(listId);
+
+       $.ajax({
+        type : 'POST',
+        url : '/postComments',
+        data : {
+          commentsText : commentsText,
+          commentId : commentId,
+          listId : listId
+        },
+        success : function (data) {
+          // 
+          console.log('success posting comments');
+          console.log('success data:');
+          console.log(data);
+
+          // line break
+          $('<br>').appendTo('.panel-footer');
+          $('<span/>').text(commentsText + " -- ")
+          .append("<a href='/profile/" + data.commentor.email + "'>" + data.commentor.email + " </a>")
+          .appendTo('.panel-footer');
+
+          // clear comments input field
+          $(this).val('');          
+        },
+        error : function (data) {
+          console.log('err data:');
+          console.log(data);
+        }
+
+       })
+    });
+    $('.form-control').keyup(function (e) {
+        console.log('keyCode: ');
+        console.log(e.keyCode);
+        if (e.keyCode == 13)
+        {
+            $(this).trigger("enterKey");
+        }
+    });
+
     // update poster information: get poster username and display it
     var ratrId = getRatrIdFromListPoster($('.list-poster').text());
     console.log('\n\n\n\n\nratrId:');
@@ -262,6 +317,10 @@ $(function () {
   // $('arrow-up').click()
 
 });
+
+function getCommentIdFromInput (_commentId) {
+  return _commentId.slice(_commentId.indexOf('-')+1, _commentId.length);
+}
 
 function getRatrIdFromListPoster (listPosterVal) {
   console.log('listPosterVal:');

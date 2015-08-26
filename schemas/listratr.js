@@ -38,7 +38,8 @@ var ListRatr = mongoose.model('ListRatr', new Schema ({
 	        profile : Object,
 	        accessToken : String,
 	        refreshToken : String
-	}
+	},
+	comments : [String]
 }));
 
 module.exports = ListRatr;

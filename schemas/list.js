@@ -24,7 +24,12 @@ var List = mongoose.model('List', new Schema ({
 		score : {
 			type : Number,
 			default : 0
-		}
+		},
+		comments : [{
+			text : String,
+			commenter : String,
+			date : Date
+		}]
 	}],
 	// array of listId the listr likes
 	likes : {
@@ -40,7 +45,7 @@ var List = mongoose.model('List', new Schema ({
 	comments : [{
 		text : String,
 		commenter : String,
-		data : Date
+		date : Date
 	}]
 }));
 

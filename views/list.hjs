@@ -4,6 +4,7 @@
   	<br>
 	<div id="main-div" style="width:65%;position:absolute;;left:17.5%;">
 	  	{{#list}}
+	  	<input type="hidden" id="listId" name="listId" value="{{_id}}">
 		<div class="panel panel-default">    
 		 	<!-- Default panel contents -->
 		 	<div class="panel-heading">
@@ -27,7 +28,12 @@
 							 
 						</div>
 						<div class="panel-body" id="item-body-{{_id}}">{{content}}</div>
-						<div class="panel-footer" style="color:grey;font-size:11px;"><span class="add-comment" id="add-comment-{{_id}}">add comment</span></div>
+						<div class="panel-footer" style="color:grey;font-size:11px;"><span class="add-comment" id="add-comment-{{_id}}">add comment</span><br>
+              				<input name="comments" type="text" class="form-control comment" id="commentsInput-{{_id}}" placeholder="add comments" aria-describedby="basic-addon1">
+              				{{#comments}}
+              				<span id="comments-{{_id}}">{{text}} {{commenter}}</span>
+              				{{/comments}}
+            			</div>
 					</div>
 				{{/listItems}}
 			</div>    	

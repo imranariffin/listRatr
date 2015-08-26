@@ -39,17 +39,20 @@ router.get('/createList', CreateListGET);
 /* POST ratrs creates a new list. */
 router.post('/createList', createListPOST);
 
-/* GET ratrs's list page. */
+/* GET: ratrs's list page. */
 router.get('/mylists/:ratrId', ratrIdGET);
 
-/* POST ratr likes a list */
+/* POST: ratr likes a list */
 router.post('/like', likePOST);
 
-/* GET ratr shares a list by acquiring the link*/
+/* GET: ratr shares a list by acquiring the link*/
 router.get('/share', shareGET);
 
-/* POST ratr upvotes a list item */
+/* POST: ratr upvotes a list item */
 router.post('/upVote', upVote);
+
+/* POST: ratr gives a comment on a list item */
+router.post('/postComments', giveComment);
 
 //////////////////////////////////////////////////
 // 				ROUTE MIDDLEWARES 				//
@@ -78,7 +81,8 @@ function homeGET (req, res, next) {
 
 			// rendaaah!
 			res.render('index', {
-				title : 'ListRatr',
+				title : 'Lystr',
+				xyz : '.xyz',
 				lists : lists,
 				isAdmin : false,
 				partials : {
@@ -104,7 +108,7 @@ function getRatr (req, res, next) {
 
 function signupGET (req, res, next) {
 	res.render('signup', { 
-		title: 'ListRatr - Signup',
+		title: 'Lystr - Signup',
 		partials : {
 			header : 'header',
 			footer : 'footer'
@@ -142,7 +146,7 @@ function signupPOST (req, res, next) {
 
 function signinGET (req, res, next) {
 	res.render('signin', { 
-		title: 'ListRatr - Signin',
+		title: 'Lystr - Signin',
 		partials : {
 			header : 'header',
 			footer : 'footer'
@@ -213,7 +217,7 @@ function listsGET (req, res, next) {
 
 			// rendaaah!
 			res.render('lists', {
-				title : 'ListRatr - Lists',
+				title : 'Lystr - Lists',
 				lists : lists,
 				isAdmin : false,
 				partials : {
@@ -290,7 +294,7 @@ function getOneListByName (req, res, next) {
 			});
 
 			res.render('list', {
-				title : 'ListRatr',
+				title : 'Lystr',
 				listTitle : list.title,
 				list : list,
 				listItems : listItems,
@@ -359,7 +363,7 @@ function CreateListGET (req, res, next) {
 
 	// render create list page
 	res.render('create-list', {
-		title : 'ListRatr - Create List',
+		title : 'Lystr - Create List',
 		partials : {
 			header : 'header',
 			footer : 'footer-create-lists'
@@ -494,7 +498,7 @@ function ratrIdGET (req, res, next) {
 			else 
 				// res.send(lists);
 				res.render('my-lists', {
-					title : 'ListRatr - My Lists',
+					title : 'Lystr - My Lists',
 					lists : lists,
 					nLists : lists.length
 				});
@@ -742,5 +746,79 @@ function updateItemScore (itemId, items, score) {
 			e.score += score;
 		}
 		return e;
+	});
+}
+
+function giveComment (req, res, next) {
+	var ratr = req.session.ratr;
+	var ratrId = ratr._id;
+	// get form data
+	var commentId = req.body.commentId;
+	var commentsText = req.body.commentsText;
+	var listId = req.body.listId;
+
+	console.log('req.body:');
+	console.log(req.body);
+
+	List.findById(listId, function (err, list) {
+		if (err)
+			res.send(err);
+		else {
+			var comment = {
+				text : commentsText,
+				commenter : ratr._id,
+				date : new Date()
+			}
+			console.log('typeof(list.items):');
+			console.log(typeof(list.items));
+			console.log('list.items:');
+			console.log(list.items);
+			// res.send('done');
+
+			// list.items.forEach(function (e, i, arr) {
+
+			// });
+			for (i in list.items) {
+				var listItem = list.items[i];
+				if (listItem._id.toString() === commentId) {
+					list.items[i];
+					console.log('list.items[i]:');
+					console.log(list.items[i]);
+					// res.send(list.items[i]);
+					// break;
+					list.items[i].comments.push(comment);
+					// list.save(function (err) {
+					// 	if (err)
+					// 		res.send(err);
+					// 	else
+					// 		res.send(comment);
+					// })
+					ListRatr.findById(ratrId, function (err, ratr) {
+						if (err)
+							res.send(err);
+						else {
+							list.save();
+							ratr.comments.push(commentId);
+							ratr.save();
+							res.send({
+								comment : comment,
+								commentor : ratr
+							});
+							// break;
+						}
+					});
+					break;
+				}
+
+			}
+
+			// .comments.push(comment)
+			// .save(function (err) {
+			// 	if (err)
+			// 		res.send(err);
+			// 	else
+			// 		res.send(comment);
+			// });
+		}
 	});
 }
