@@ -43,6 +43,12 @@ router.get('/mylists/:ratrId', ratrIdGET);
 /* POST ratr likes a list */
 router.post('/like', likePOST);
 
+/* GET ratr shares a list by acquiring the link*/
+router.get('/share', shareGET);
+
+/* POST ratr upvotes a list item */
+router.post('/upVote', upVote);
+
 //////////////////////////////////////////////////
 // 				ROUTE MIDDLEWARES 				//
 //////////////////////////////////////////////////
@@ -208,9 +214,10 @@ function listsGET (req, res, next) {
 }
 
 function getOneListByName (req, res, next) {
+	// get ratr
+	var ratr = req.session.ratr;
 	// get list name from url
 	var listName = req.params.listName;
-
 	// convert listName from 'a-random-list-name' to 'aRandomListName'
 	var properListName = properizeListName(listName);
 
@@ -223,10 +230,64 @@ function getOneListByName (req, res, next) {
 		else if (!list) {
 			res.send('no such list found');
 		} else {
+
+			// updates list.items.upVoted and .downVoted to true
+			// if ratr has oredy liked
+			console.log(ratr.email);
+			console.log(ratr.votes);
+
+			var upVotes = [];
+			var downVotes = [];
+			var listItems = [];
+
+			if (ratr)
+				list.items.forEach(function (e, i, arr) {
+					var itemId = String(e._id);
+					var item = {
+						header : e.header,
+						content : e.content,
+						_id : e._id,
+						score : e.score,
+						up : false,
+						down : false
+					};
+					// console.log('in list.items[]:');
+					// console.log('e._id:');
+					// console.log(e._id);
+					// console.log('typeof(e._id):');
+					// console.log(typeof(e._id));
+					// console.log('ratr.votes.up.indexOf(e._id):');
+					// console.log(ratr.votes.up.indexOf(e._id));
+					// console.log('ratr.votes.down.indexOf(e._id):');
+					// console.log(ratr.votes.down.indexOf(e._id));
+					if (ratr.votes.up.indexOf(itemId) != -1) {
+						console.log(itemId + ' voted up');
+						upVotes.push(true);
+						downVotes.push(false);
+						item.up = true;
+						item.down = false;
+					}
+					if (ratr.votes.down.indexOf(itemId) != -1) {
+						console.log(itemId + ' voted down');
+						upVotes.push(false);
+						downVotes.push(true);
+						item.up = false;
+						item.down = true;
+					}
+					listItems.push(item);
+				});
+
+
+			console.log('\nlistItems:');
+			console.log(listItems);
+
 			res.render('list', {
 				title : 'ListRatr',
 				listTitle : list.title,
 				list : list,
+				listItems : listItems,
+				upVotes : upVotes,
+				downVotes :downVotes,
 				partials : {
 					header : 'header',
 					footer : 'footer'
@@ -355,7 +416,7 @@ function createListPOST (req, res, next) {
 function createUrl (listTitle) {
 	var SPACE = " ";
 	var HYPHEN = "-";
-	// var url = '/lists';
+	var url = '/';
 
 	// get rid of undefined strings ('')
 	// while replace SPACE with HYPHEN
@@ -461,6 +522,92 @@ function likePOST (req, res, next) {
 			listId : listId,
 			ratr : ratr
 		});
+	}
+}
+
+function shareGET (req, res, next) {
+	var ratr = req.session.ratr;
+
+	// expects req.query form client
+	var listId = req.query.listId;
+
+	List.findById(listId, function (err, list) {
+		if (err)
+			res.send(err);
+		else if (!list)
+			res.send('err: user does not exist');
+		else
+			res.send(list);
+	});
+}
+
+function upVote (req, res, next) {
+	var ratr = req.session.ratr;
+	var itemId = req.body.itemId;
+	var action = req.body.action;
+
+	console.log('itemId:');
+	console.log(itemId);
+	console.log('action:');
+	console.log(action);
+
+	if (!ratr)
+		res.send('err: please log in to upvote');
+	else {
+		var ratrId = ratr._id;
+
+		List
+			.findOne({})
+			.where('items._id').equals(itemId)
+			.exec(function (err, list) {
+				if (err)
+					res.send(err);
+				else {
+					ListRatr.findById(ratrId, function (err, ratr) {
+						if (err)
+							res.send(err);
+						else {
+							if (action === '0To1') {
+								console.log('\nlist.items:');
+								console.log(list.items);
+								list.items = updateItemScore(itemId, list.items, 1);
+								console.log('\n\nafter\nlist.items:');
+								console.log(list.items);
+								ratr.votes.up.push(itemId);
+								// ratr.votes.down.pop(itemId);
+							} else if (action === '0To-1') {
+								console.log('\nlist.items:');
+								console.log(list.items);
+								list.items = updateItemScore(itemId, list.items, -1);
+								console.log('\n\nafter\nlist.items:');
+								ratr.votes.down.push(itemId);
+								// ratr.votes.up.pop(itemId);
+							} else if (action === '-1To1') {
+								console.log('\nlist.items:');
+								console.log(list.items);
+								list.items = updateItemScore(itemId, list.items, 2);
+								console.log('\n\nafter\nlist.items:');
+								ratr.votes.up.push(itemId);
+								ratr.votes.down.pop(itemId);
+							} else if (action === '1To-1') {
+								console.log('\nlist.items:');
+								console.log(list.items);
+								list.items = updateItemScore(itemId, list.items, -2);
+								console.log('\n\nafter\nlist.items:');
+								ratr.votes.up.pop(itemId);
+								ratr.votes.down.push(itemId);
+							} else if (action === '-1To0') {
+								ratr.votes.down.pop(itemId);
+							} else if (action === '1To0') {
+								ratr.votes.up.pop(itemId);
+							}
+
+							list.save();
+							ratr.save();
+						}
+					});
+				}
+			});
 	}
 }
 
@@ -576,4 +723,16 @@ function hasLiked (ratr, list) {
 	} else {
 		return true;
 	}
+}
+
+// useful for middleware upVote()
+// does not return
+function updateItemScore (itemId, items, score) {
+	console.log('\n\n\nINSIDE updateItemScore');
+	return items.map(function (e, i, arr) {
+		if (e._id.toString() === itemId) {
+			e.score += score;
+		}
+		return e;
+	});
 }

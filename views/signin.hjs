@@ -9,7 +9,7 @@
             <br>
             <div class="input-group" style="width:70%;left:15%">
               <span class="input-group-addon" id="basic-addon1">@</span>
-              <input type="email" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
+              <input name="email" type="email" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
             </div>
             <br>
             <div class="input-group" style="width:70%;left:15%">

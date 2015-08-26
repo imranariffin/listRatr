@@ -27,7 +27,7 @@ var List = mongoose.model('List', new Schema ({
 		}
 	}],
 	// array of listId the listr likes
-	likes : {
+	score : {
 		type : Number,
 		default : 0
 	},

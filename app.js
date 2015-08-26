@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var sessions = require('client-sessions');
 
+var mongoose = require('mongoose');
+var ListRatr = require('./schemas/listratr');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var admin = require('./routes/admin');
@@ -50,6 +53,9 @@ app.use(sessions({
   activeDuration : 5 * 60 * 10000
 }));
 
+// always update session
+app.use(updateSession);
+
 app.use('/', routes);
 app.use('/users', users);
 app.use('/admin', admin);
@@ -88,3 +94,38 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+function updateSession (req, res, next) { //user next() for next middleware
+
+  console.log('\n');
+  console.log("in updateSession()");
+  console.log('\n');
+
+  if (req.session && req.session.ratr) {
+
+    // FIND USER by email (email is unique)
+    // actually, finding by username should 
+    // also work (username is also unique)
+    ListRatr.findOne({ email : req.session.ratr.email }, function (err, ratr) {
+      if (ratr) {
+
+        // save user to req object
+        req.ratr = ratr;
+        // delete password for security
+        delete req.ratr.password;
+
+        // update session
+        req.session.ratr = req.ratr;
+        res.locals.ratr = req.ratr;
+        console.log('session updated');
+      } else {
+        console.log('user is undefined');
+      }
+
+      next();
+    });
+  } else {
+    console.log('req.session or req.session.user is false');
+    next();
+  }
+}

@@ -35,13 +35,14 @@ router.get('/ratrs', function (req, res, next) {
 
 			console.log(ratrList);
 
-			res.render('ratrs', { 
-				title: 'admin - ratrs',
-				ratrs : ratrs,
-				ratrList : ratrList,
-				typeofRatrs : typeof(ratrs),
-				nRatrs : nRatrs
-			});
+			res.send(ratrs);
+			// res.render('ratrs', { 
+			// 	title: 'admin - ratrs',
+			// 	ratrs : ratrs,
+			// 	ratrList : ratrList,
+			// 	typeofRatrs : typeof(ratrs),
+			// 	nRatrs : nRatrs
+			// });
 		}
 	});
 });

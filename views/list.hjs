@@ -3,31 +3,38 @@
   	<h2 style="text-align:center">{{listTitle}}</h2>
   	<br>
 
+  	{{list}}
+
 	<div id="main-div" style="width:65%;position:absolute;;left:17.5%;">
 	  	{{#list}}
 		<div class="panel panel-default">    
 		 	<!-- Default panel contents -->
 		 	<div class="panel-heading">
-	          <b>{{ title }} </b> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span id="likeValue-{{_id}}">{{ likes }} <br></span>
+	          <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b></a> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span id="likeValue-{{_id}}">{{ likes }} </span><span class="btn-share" id="btn-share-{{_id}}" style="color:grey;">share</span> <span class="share-link" id="share-link-{{_id}}">dummy link</span>
 	    </div>
 			<div class="panel-body">
 				<br>
-				{{#items}}
+				{{#listItems}}
 					<div class="panel panel-default">
 						<div class="panel-heading" style="overflow:hidden;">
 							<div style="height:100%;float:left">
-								<div class="arrow-up"></div>
-								<div class="netVote">0</div>						
-								<div class="arrow-down"></div>
+								<span>up {{up}}</span>
+								<span>down {{down}}</span>
+								<input class="up" id="up-{{_id}}" name="up" type="hidden" value="{{up}}" />
+								<input class="down" id="down-{{_id}}" name="down" type="hidden" value="{{down}}" />
+								<div class="arrow-up" id="upVote-{{_id}}"></div>
+								<div class="netVote">{{score}}</div>						
+								<div class="arrow-down" id="downVote-{{_id}}"></div>
 							</div>
 	    					<div style="height:100%;float:left;vertical-align:middle;text-align:center;display:table-cell;">
 	    						<div style="height:100%;vertical-align:middle;text-align:center;display:table-cell;">{{header}}</div>
 	    					</div>
 							 
 						</div>
-						<div class="panel-body">{{content}}</div>
+						<div class="panel-body" id="item-body-{{_id}}">{{content}}</div>
+						<div class="panel-footer" style="color:grey;font-size:11px;"><span class="add-comment" id="add-comment-{{_id}}">add comment</span></div>
 					</div>
-				{{/items}}
+				{{/listItems}}
 			</div>    	
 		</div>  
 		{{/list}}

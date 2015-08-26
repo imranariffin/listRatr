@@ -398,7 +398,13 @@ function createListItemWithPanel(listSize) {
 		.addClass("item-content")
 		.attr('id', 'item-content' + listSize)		
 		.text("Item Body " + listSize)
-		.appendTo($('.panel-body').last());				
+		.appendTo($('.panel-body').last());		
+	// create PANEL-FOOTER, insert into panel
+	jQuery("<div/>")
+		.addClass("panel-footer")
+		.attr('id', 'panel-footer' + listSize)
+		.appendTo($('.panel')).last()
+		.text("add comments");
 }
 
 ///////////////////////////
