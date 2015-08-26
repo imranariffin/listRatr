@@ -275,5 +275,16 @@ function shareSuccess (data) {
 
   // update front end likes data
   $('#share-link-' + data._id).show()
-  .text("http://listratr.xyz/l/" + data._id);
+  .text("http://listratr.xyz/l/" + hyphenateTitle(data.title));
+}
+
+function hyphenateTitle (formalizedTitle) {
+  return formalizedTitle.split(' ')
+  .map(function (e, i, arr) {
+    e = e.toLowerCase();
+    if (i !=0)
+      return '-'+e;
+    else
+      return e;
+  }).join('');
 }

@@ -281,6 +281,11 @@ function getOneListByName (req, res, next) {
 			console.log('\nlistItems:');
 			console.log(listItems);
 
+			// rank listItems based on item score
+			listItems = listItems.sort(function (a, b) {
+				return (a.score < b.score);
+			});
+
 			res.render('list', {
 				title : 'ListRatr',
 				listTitle : list.title,

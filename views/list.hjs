@@ -2,9 +2,6 @@
   	<body>
   	<h2 style="text-align:center">{{listTitle}}</h2>
   	<br>
-
-  	{{list}}
-
 	<div id="main-div" style="width:65%;position:absolute;;left:17.5%;">
 	  	{{#list}}
 		<div class="panel panel-default">    
@@ -18,8 +15,6 @@
 					<div class="panel panel-default">
 						<div class="panel-heading" style="overflow:hidden;">
 							<div style="height:100%;float:left">
-								<span>up {{up}}</span>
-								<span>down {{down}}</span>
 								<input class="up" id="up-{{_id}}" name="up" type="hidden" value="{{up}}" />
 								<input class="down" id="down-{{_id}}" name="down" type="hidden" value="{{down}}" />
 								<div class="arrow-up" id="upVote-{{_id}}"></div>
