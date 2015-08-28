@@ -53,19 +53,21 @@ router.get('/lists', function (req, res, next) {
 		if (err) 
 			res.send(err);
 		else {
-			// res.send(lists);
+			res.send(lists);
 			// rendaaaahh!
-			res.render('lists', {
-				title : 'ListRatr - All Lists',
-				lists : lists,
+			// res.render('lists', {
+			// 	title : 'Lystr Admin - All Lists',
+			// 	lists : lists,
 
-				// show additinal data to admin
-				isAdmin : true,
+			// 	// show additinal data to admin
+			// 	isAdmin : true,
 
-				partials : {
-					listsContainer : 'lists-container'
-				}
-			});
+			// 	partials : {
+			// 		header : 'header',
+			// 		footer : 'footer',
+			// 		listsContainer : 'lists-container'
+			// 	}
+			// });
 		}
 	});
 });

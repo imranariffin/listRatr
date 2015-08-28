@@ -39,7 +39,13 @@ var ListRatr = mongoose.model('ListRatr', new Schema ({
 	        accessToken : String,
 	        refreshToken : String
 	},
-	comments : [String]
+	// nComments is the total number of comments accross 
+	// all items in the list
+	nComments : {
+		type : Number,
+		default : 0
+	},
+	comments : [{type : ObjectId}]
 }));
 
 module.exports = ListRatr;

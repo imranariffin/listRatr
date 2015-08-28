@@ -15,7 +15,7 @@
 	</div>
 	<div class="btn-group btn-group-justified" role="group" aria-label="...">
 	  <div class="btn-group" role="group">
-	    <a href="/"><button type="button" class="btn btn-default">ListRatr</button></a>
+	    <a href="/"><button type="button" class="btn btn-default">Lystr</button></a>
 	  </div>		
 	  <div class="btn-group" role="group">
 	    <a href="/lists"><button type="button" class="btn btn-default">View All Lists</button></a>
@@ -24,10 +24,10 @@
 	    <a href="/createList"><button type="button" class="btn btn-default">Create New List</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
-	    <a href="/signin"><button type="button" class="btn btn-default"><img style="height:60%;width:5%;" src="/images/facebook_logo_detail_small.png">&nbsp Signin as a Ratr</button></a>
+	    <a href="/signin"><button type="button" class="btn btn-default"><img style="height:60%;width:5%;" src="/images/facebook_logo_detail_small.png">&nbsp Signin as a Lystr</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
-		<a href="/signup"><button type="button" class="btn btn-default"><img style="height:60%;width:5%;" src="/images/facebook_logo_detail_small.png">&nbsp Be a Ratr</button></a>	  
+		<a href="/signup"><button type="button" class="btn btn-default"><img style="height:60%;width:5%;" src="/images/facebook_logo_detail_small.png">&nbsp Be a Lystr</button></a>	  
 	  </div>
 	</div>	
 	<br>

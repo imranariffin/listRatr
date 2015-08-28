@@ -9,7 +9,7 @@
 	 	
 	 	<!-- <input type="hidden" name="listId" value="{{listId}}"> -->
     		<!-- <div id="likeId-{{_id}}" class="likedButton"> -->
-          <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b> </a> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span id="likeValue-{{_id}}">{{ likes }}</span> | <span id="btn-share" style="color:grey;">share</span> | <span style="color:grey">{{comments.length}} comments</span>
+          <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b> </a> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span id="likeValue-{{_id}}">{{ likes }}</span> | <span id="btn-share" style="color:grey;">share</span> | <span style="color:grey">{{nComments}} comments</span>
         <!-- </div> -->
   
 		<!-- </button> -->
@@ -20,8 +20,9 @@
     	id: {{_id}} <br>
     	dateCreated : {{ dateCreated }} <br>
     	Owner : {{ owner }} <br>
-    	Score : {{ score }} <br>
-    	Comments : {{ comments }} <br>
+    	Votes : {{ votes }} <br>
+    	nVotes : {{ votes.up.length - votes.down.length }} <br>
+    	Comments : {{ nComments }} <br>
     	Likes : {{ likes }} <br>
     	Url : {{ url }} <br>
     	Items : {{ items }} <br>

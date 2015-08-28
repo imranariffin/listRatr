@@ -1,5 +1,8 @@
 
 $(function () {
+
+  // $('.')
+
   // test stackoverflow upvote button
   $('.vote').click(function () {
     if ($(this).hasClass(''))
@@ -47,18 +50,34 @@ $(function () {
         },
         success : function (data) {
           // 
+
+          if (data ==' err')
+            return undefined;
+
           console.log('success posting comments');
           console.log('success data:');
           console.log(data);
+          console.log('typeof(data):');
+          console.log(typeof(data));
+          // console.log("data.indexOf('err'):");
+          // console.log(data.indexOf('err'));
 
           // line break
           $('<br>').appendTo('.panel-footer');
-          $('<span/>').text(commentsText + " -- ")
-          .append("<a href='/profile/" + data.commentor.email + "'>" + data.commentor.email + " </a>")
-          .appendTo('.panel-footer');
+          if (String(data).indexOf('err') === -1) {
+            $('<span/>').text(commentsText + " -- ")
+            .append("<a href='/profile/" + data.commentor.email + "'>" + data.commentor.email + " </a>")
+            .appendTo('.panel-footer');
+          } else {
+            // sends error message: must login to comment
+            $('<br>').prependTo('.panel-footer');
+            $('<span/>').text("please signup or signin to comment")
+            .attr('style', 'color:red;')
+            .prependTo('.panel-footer');
+          }
 
           // clear comments input field
-          $(this).val('');          
+          $('.comment').val('');
         },
         error : function (data) {
           console.log('err data:');

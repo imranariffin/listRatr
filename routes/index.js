@@ -59,25 +59,22 @@ router.post('/postComments', giveComment);
 //////////////////////////////////////////////////
 
 function homeGET (req, res, next) {
+
+	// TEST
+	console.log('\n\nTEST');
+	console.log('req.session:');
+	console.log(req.session);
+	console.log('\n');
+
 	// get first list from db
 	List.find({}, function (err, lists) {
 		if (err) 
 			res.send(err);
 		else {
 			// pseudo: in future top list should be list with highest rank/score
-			// for now assume first list to be top list
-			// topList = lists[0];
-			// res.send(lists);
-
-			console.log('\n\nlists before sort:\n');
-			console.log(lists);
-			console.log('\n\n');
 
 			// rank now! (based on likes for now)
 			lists = sortByLikes(lists);
-			console.log('\n\nlists after sort:\n');
-			console.log(lists);
-			console.log('\n\n');
 
 			// rendaaah!
 			res.render('index', {
@@ -189,11 +186,8 @@ function profileGET (req, res, next) {
 function listsGET (req, res, next) {
 	// get ratrId
 	var ratr = req.session.ratr;
-	// var ratrId;
-	// if (ratr)
-	// 	ratrId = ratr._id;
-	// else
-	// 	res.send('bad: no user logged in on this session');
+
+	// get nComments
 
 	// get first list from db
 	List.find({}, function (err, lists) {
@@ -201,19 +195,9 @@ function listsGET (req, res, next) {
 			res.send(err);
 		else {
 			// pseudo: in future top list should be list with highest rank/score
-			// for now assume first list to be top list
-			// topList = lists[0];
-			// res.send(lists);
-
-			console.log('\n\nlists before sort:\n');
-			console.log(lists);
-			console.log('\n\n');
 
 			// rank now! (based on likes for now)
 			lists = sortByLikes(lists);
-			console.log('\n\nlists after sort:\n');
-			console.log(lists);
-			console.log('\n\n');
 
 			// rendaaah!
 			res.render('lists', {
@@ -254,8 +238,8 @@ function getOneListByName (req, res, next) {
 
 			if (ratr)
 				list.items.forEach(function (e, i, arr) {
-					console.log(ratr);
-					console.log(ratr.votes);
+					// console.log(ratr);
+					// console.log(ratr.votes);
 					var itemId = String(e._id);
 					var item = {
 						header : e.header,
@@ -263,7 +247,8 @@ function getOneListByName (req, res, next) {
 						_id : e._id,
 						score : e.score,
 						up : false,
-						down : false
+						down : false,
+						comments : e.comments
 					};
 
 					if (ratr.votes.up.indexOf(itemId) != -1) {
@@ -285,8 +270,8 @@ function getOneListByName (req, res, next) {
 			else
 				listItems = list.items;
 
-			console.log('\nlistItems:');
-			console.log(listItems);
+			// console.log('\nlistItems:');
+			// console.log(listItems);
 
 			// rank listItems based on item score
 			listItems = listItems.sort(function (a, b) {
@@ -347,12 +332,6 @@ function properizeListName (listName) {
 */
 function sortByLikes (lists) {
 	return lists.sort(function (a, b) {
-
-		console.log('a.likes:');
-		console.log(a.likes);
-		console.log('b.likes:');
-		console.log(b.likes);
-
 		return b.likes - a.likes;
 	});
 }
@@ -374,10 +353,8 @@ function CreateListGET (req, res, next) {
 function createListPOST (req, res, next) {
 	// get ratr
 	var ratr = req.session.ratr;
-
 	// get form data
 	var formData = req.body;
-
 	// EXTRACT FORM DATA
 	var listTitle = formData.title;
 
@@ -504,29 +481,16 @@ function ratrIdGET (req, res, next) {
 				});
 		});
 	}
-
-	// get from db all the lists that belong to ratr
-	// var query = {
-	// 	owner : ratr._id
-	// }
-	// List.find(query, function (err, lists) {
-	// 	if (err)
-	// 		res.send(err);
-	// 	else {
-	// 		res.send(lists);
-	// 	}
-	// });
 }
 
 function likePOST (req, res, next) {
-	var ratr = req.session.ratr;
 
+	var ratr = req.session.ratr;
 	// expects a req.body.listId;
 	var listId = req.body.listId;
 
 	if (!ratr)
 		res.send('bad: please login to like');
-
 	else {
 		var ratrId = ratr._id;
 
@@ -557,11 +521,6 @@ function upVote (req, res, next) {
 	var ratr = req.session.ratr;
 	var itemId = req.body.itemId;
 	var action = req.body.action;
-
-	console.log('itemId:');
-	console.log(itemId);
-	console.log('action:');
-	console.log(action);
 
 	if (!ratr)
 		res.send('err: please log in to upvote');
@@ -638,25 +597,12 @@ function updateListLikes (res, body) {
 		if (err) {
 			res.send(err);
 		} else {
-			// // increse list's likes
-			// list.likes += 1;
-			
-			// update list score
-			// list.score += topRank(bla bla)
-
-			// list.save(function (err) {
-			// 	if (err) {
-			// 		res.send(err);
-			// 	} else {
 
 			// update ratr's likes then send response
 			updateRatrLikes(res, {
 				list : list,
 				ratr : ratr
 			});
-
-			// 	}
-			// });
 		}
 	});
 }
@@ -706,22 +652,6 @@ function updateRatrLikes (res, body) {
 			list.save();
 
 			res.send(response);
-
-
-			// // save updates
-			// ratr.save(function (err) {
-			// 	if (err) {
-			// 		res.send(err);
-			// 	} else {
-
-			// 		// set success response then send
-			// 		var response = {
-			// 			ratr : ratr,
-			// 			list : list
-			// 		};
-			// 		res.send(response);
-			// 	}
-			// });
 		}
 	});	
 }
@@ -751,74 +681,85 @@ function updateItemScore (itemId, items, score) {
 
 function giveComment (req, res, next) {
 	var ratr = req.session.ratr;
-	var ratrId = ratr._id;
+	var ratrId;
 	// get form data
 	var commentId = req.body.commentId;
 	var commentsText = req.body.commentsText;
 	var listId = req.body.listId;
 
-	console.log('req.body:');
-	console.log(req.body);
+	// console.log('req.body:');
+	// console.log(req.body);
+	if (!ratr)
+		res.send('err: no user is logged in');	
+	else {
+		ratrId = ratr._id;
 
-	List.findById(listId, function (err, list) {
-		if (err)
-			res.send(err);
-		else {
-			var comment = {
-				text : commentsText,
-				commenter : ratr._id,
-				date : new Date()
-			}
-			console.log('typeof(list.items):');
-			console.log(typeof(list.items));
-			console.log('list.items:');
-			console.log(list.items);
-			// res.send('done');
-
-			// list.items.forEach(function (e, i, arr) {
-
-			// });
-			for (i in list.items) {
-				var listItem = list.items[i];
-				if (listItem._id.toString() === commentId) {
-					list.items[i];
-					console.log('list.items[i]:');
-					console.log(list.items[i]);
-					// res.send(list.items[i]);
-					// break;
-					list.items[i].comments.push(comment);
-					// list.save(function (err) {
-					// 	if (err)
-					// 		res.send(err);
-					// 	else
-					// 		res.send(comment);
-					// })
-					ListRatr.findById(ratrId, function (err, ratr) {
-						if (err)
-							res.send(err);
-						else {
-							list.save();
-							ratr.comments.push(commentId);
-							ratr.save();
-							res.send({
-								comment : comment,
-								commentor : ratr
-							});
-							// break;
-						}
-					});
-					break;
+		List.findById(listId, function (err, list) {
+			if (err)
+				res.send(err);
+			else {
+				var comment = {
+					text : commentsText,
+					commenter : ratr._id,
+					date : Date.now()
 				}
+				console.log('typeof(list.items):');
+				console.log(typeof(list.items));
+				console.log('list.items:');
+				console.log(list.items);
 
+				var nComments = 0;
+				for (i in list.items) {
+					var listItem = list.items[i];
+					if (listItem.comments)
+						nComments += listItem.comments.length;
+				}
+				// 
+				list.nComments = nComments;
+
+				for (i in list.items) {
+					var listItem = list.items[i];
+					if (String(listItem._id) === commentId) {
+						list.items[i];
+						console.log('list.items[i]:');
+						console.log(list.items[i]);
+						// res.send(list.items[i]);
+						// break;
+						list.items[i].comments.push(comment);
+						list.save(function (err) {
+							if (err)
+								res.send(err);
+						});
+						// list.save(function (err) {
+						// 	if (err)
+						// 		res.send(err);
+						// 	else
+						// 		res.send(comment);
+						// })
+						ListRatr.findById(ratrId, function (err, ratr) {
+							if (err)
+								res.send(err);
+							else {
+
+								console.log('\n\nratr:');
+								console.log(ratr);
+								console.log('\n');
+
+								ratr.comments.push(commentId);
+								ratr.nComments = ratr.comments.length;
+								ratr.save();
+								res.send({
+									comment : comment,
+									commentor : ratr
+								});
+								// break;
+							}
+						});
+						break;
+					}
+
+				}
 			}
-
-			// .comments.push(comment)
-			// .save(function (err) {
-			// 	if (err)
-			// 		res.send(err);
-			// 	else
-			// 		res.send(comment);
-			// });
-		}
-	});
+		});
+	}
 }

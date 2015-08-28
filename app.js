@@ -154,11 +154,10 @@ function updateSession (req, res, next) { //user next() for next middleware
 function redirectToMain (req, res) {
 
   console.log('redirecting to main');
-  // console.log('res: ' + res);
-  // console.log('req: ' + req);
-  console.log(req.ratr.email);
+  console.log('req.session.passport.user:');
+  console.log(req.session.passport.user);
 
-  ListRatr.findOne({ email : req.user.emails[0].value }, function (err, ratr) {
+  ListRatr.findOne({ email : req.session.passport.user.emails[0].value }, function (err, ratr) {
     if (!err) {
       if (ratr) {
         req.session.ratr = ratr;

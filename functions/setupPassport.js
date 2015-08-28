@@ -68,6 +68,7 @@ function setupPassport (app, passport) {
                 if (err) {
                   return done(err, null);
                 } else {
+                  // save profile to req.session.passport
                   return done(null, profile);
                 }
               });

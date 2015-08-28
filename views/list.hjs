@@ -8,7 +8,14 @@
 		<div class="panel panel-default">    
 		 	<!-- Default panel contents -->
 		 	<div class="panel-heading">
-	          <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b></a> <br> <span id="likeValue-{{_id}}">{{ likes }} </span> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> | <span class="btn-share" id="btn-share-{{_id}}" style="color:grey;">share</span> <span class="share-link" id="share-link-{{_id}}">dummy link</span> | <span style="color:grey;" class="list-poster">posted by {{owner}}</span>
+	          <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b></a> <br> <span id="likeValue-{{_id}}">{{ likes }} </span> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> | <span class="btn-share" id="btn-share-{{_id}}" style="color:grey;">share</span> <span class="share-link" id="share-link-{{_id}}">dummy link</span> | <span style="color:grey;" class="list-poster">posted by {{owner}}</span> <br>
+	          <span class="add-comment" id="add-comment-{{_id}}">add comment</span>
+	          <div class="comment-box" id="comment-box-{{_id}}">
+		          <input name="comments" type="text" class="form-control comment" id="commentsInput-{{_id}}" placeholder="add comments" aria-describedby="basic-addon1">
+					{{#comments}}
+					<span id="comments-{{_id}}">{{text}} -- {{commenter}}</span><br>
+					{{/comments}}
+	          </div>
 	    </div>
 			<div class="panel-body">
 				<br>
@@ -31,7 +38,7 @@
 						<div class="panel-footer" style="color:grey;font-size:11px;"><span class="add-comment" id="add-comment-{{_id}}">add comment</span><br>
               				<input name="comments" type="text" class="form-control comment" id="commentsInput-{{_id}}" placeholder="add comments" aria-describedby="basic-addon1">
               				{{#comments}}
-              				<span id="comments-{{_id}}">{{text}} {{commenter}}</span>
+              				<span id="comments-{{_id}}">{{text}} -- {{commenter}}</span>
               				{{/comments}}
             			</div>
 					</div>

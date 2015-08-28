@@ -27,7 +27,7 @@ var List = mongoose.model('List', new Schema ({
 		},
 		comments : [{
 			text : String,
-			commenter : String,
+			commenter : ObjectId,
 			date : Date
 		}]
 	}],
@@ -46,7 +46,12 @@ var List = mongoose.model('List', new Schema ({
 		text : String,
 		commenter : String,
 		date : Date
-	}]
+	}],
+	nComments : {type : Number, default : 0}
 }));
 
 module.exports = List;
+
+function autoSetCommentsLength () {
+	return this.length;
+}
