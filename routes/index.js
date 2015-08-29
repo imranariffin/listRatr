@@ -270,13 +270,16 @@ function getOneListByName (req, res, next) {
 			else
 				listItems = list.items;
 
-			// console.log('\nlistItems:');
-			// console.log(listItems);
+			console.log('\nlistItems BEFORE SORT:');
+			console.log(listItems);
 
 			// rank listItems based on item score
 			listItems = listItems.sort(function (a, b) {
 				return (a.score < b.score);
 			});
+
+			console.log('\nlistItems AFTER SORT:');
+			console.log(listItems);
 
 			res.render('list', {
 				title : 'Lystr',
@@ -568,8 +571,10 @@ function upVote (req, res, next) {
 								ratr.votes.up.pop(itemId);
 								ratr.votes.down.push(itemId);
 							} else if (action === '-1To0') {
+								list.items = updateItemScore(itemId, list.items, 1);
 								ratr.votes.down.pop(itemId);
 							} else if (action === '1To0') {
+								list.items = updateItemScore(itemId, list.items, -1);
 								ratr.votes.up.pop(itemId);
 							}
 
@@ -673,7 +678,14 @@ function updateItemScore (itemId, items, score) {
 	console.log('\n\n\nINSIDE updateItemScore');
 	return items.map(function (e, i, arr) {
 		if (e._id.toString() === itemId) {
+			console.log(e._id);
+			console.log('itemId:');
+			console.log(itemId);
+			console.log('e.score BEFORE:');
+			console.log(e.score);
 			e.score += score;
+			console.log('e.score AFTER:');
+			console.log(e.score);
 		}
 		return e;
 	});

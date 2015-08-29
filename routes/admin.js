@@ -106,4 +106,94 @@ router.post('/signup', function (req, res, next) {
 	});
 });
 
+router.get('/back-to-sq-1', function (req, res, next) {
+
+	List.find({}, function (err, lists) {
+		if (err) 
+			send(err);
+		else if (!lists) {
+			res.send('no list available');
+		} else {
+			for (i in lists) {
+				var list = lists[i];
+				list.likes = 0;
+				list.comments = [];
+				list.nComments = 0;
+				console.log('list.likes');
+				console.log(list.likes);
+				console.log('list.comments');
+				console.log(list.comments);
+				console.log('list.nComments');
+				console.log(list.nComments);
+				for (j in list.items) {
+					var listItem = list.items;
+					lists[i].items[j].score = 0;
+					lists[i].items[j].comments = [];
+					console.log('listItem.score');
+					console.log(lists[i].items[j].score);
+					console.log('lists[i].items[j].comments');
+					console.log(lists[i].items[j].comments);
+				}
+				list.save(function (err) {
+					if (err)
+						res.send(err);
+					else
+						next();
+				});
+			}
+
+			// lists.save(function (err) {
+			// 	if (err)
+			// 		res.send(err);
+			// 	else
+			// 		res.next();
+			// });
+			// next();
+		}
+	});
+}, function (req, res, next) {
+	res.send('done resetting');
+});
+
+	// _resetLystr, _resetLysterer);
+
+function _resetLystr (req, res, next) {
+	// reset all lystrs and lystrers to factory state 
+	List.find({}, resetLystr);
+}
+
 module.exports = router;
+
+function _resetLysterer (req, res, next) {
+	res.send('done resetting');
+}
+
+	// // basic information
+	// id : ObjectId,
+	// title : String,
+	// dateCreated: Date,
+	// owner : String,
+	// url : String,
+	// items : [{
+	// 	header : String,
+	// 	content : String,
+	// 	score : {
+	// 		type : Number,
+	// 		default : 0
+	// 	},
+	// 	comments : [{
+	// 		text : String,
+	// 		commenter : ObjectId,
+	// 		date : Date
+	// 	}]
+	// }],
+	// likes : {
+	// 	type : Number,
+	// 	default : 0
+	// },
+	// comments : [{
+	// 	text : String,
+	// 	commenter : String,
+	// 	date : Date
+	// }],
+	// nComments : {type : Number, default : 0}
