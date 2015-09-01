@@ -7,6 +7,9 @@ var ListRatr = require('../schemas/listratr');
 var List = require('../schemas/list');
 var ObjectId = mongoose.Schema.ObjectId;
 
+// graph
+var request = require('request');
+
 /* GET home page. */
 router.get('/', homeGET);
 
@@ -18,6 +21,9 @@ router.get('/signup', signupGET);
 /* POST signup form. */
 router.post('/signup', signupPOST);
 
+/* GET signout */
+router.get('/signout', signout);
+
 /* GET signin page. */
 router.get('/signin', signinGET);
 
@@ -25,7 +31,7 @@ router.get('/signin', signinGET);
 router.post('/signin', signinPOST);
 
 /* GET ratrs's profile page. */
-router.get('/profile', profileGET);
+router.get('/lystr', profileGET);
 
 /* GET all lists. */
 router.get('/lists', listsGET);
@@ -54,6 +60,12 @@ router.post('/upVote', upVote);
 /* POST: ratr gives a comment on a list item */
 router.post('/postComments', giveComment);
 
+// /* GET: fb api */
+// router.get('/graph', function (req, res, next) {
+// 	var graphUrl = 
+// 	request('graph.')
+// });
+
 //////////////////////////////////////////////////
 // 				ROUTE MIDDLEWARES 				//
 //////////////////////////////////////////////////
@@ -66,6 +78,8 @@ function homeGET (req, res, next) {
 	console.log(req.session);
 	console.log('\n');
 
+	var loggedIn = false, notLoggedIn = true;
+
 	// get first list from db
 	List.find({}, function (err, lists) {
 		if (err) 
@@ -76,12 +90,65 @@ function homeGET (req, res, next) {
 			// rank now! (based on likes for now)
 			lists = sortByLikes(lists);
 
+			if (req.session.ratr) {
+				loggedIn = true;
+				notLoggedIn = false;
+			}
+
+			// ListRatr.find({}, function (err, ratrs) {
+			// 	if (err) {
+			// 		res.send(err);
+			// 	} else {
+
+			// 		for (i in lists) {
+			// 			var list = lists[i];
+			// 			for (j in ratrs) {
+			// 				var ratr = ratrs[j];
+			// 				console.log('ratr.email:');
+			// 				console.log(ratr.email);
+			// 				// console.log('list.owner:');
+			// 				// console.log(list.owner);
+			// 				// console.log('ratr._id:');
+			// 				// console.log(ratr._id);
+			// 				if (String(list.owner) === String(ratr._id)) {
+			// 					lists[i].profilePicture = ratr.profilePicture;
+			// 					list.profilePicture = ratr.profilePicture;
+			// 					console.log('ratr.profilePicture:');
+			// 					console.log(ratr.profilePicture);
+			// 					console.log('lists[i].profilePicture:');
+			// 					console.log(lists[i].profilePicture);
+			// 					list.save();
+			// 				}
+			// 			}
+			// 		}
+
+			// 		// rendaaah!
+			// 		res.render('index', {
+			// 			title : 'Lystr',
+			// 			ratr : req.session.ratr,
+			// 			xyz : '.xyz',
+			// 			lists : lists,
+			// 			isAdmin : false,
+			// 			notLoggedIn : notLoggedIn,
+			// 			loggedIn : loggedIn,
+			// 			partials : {
+			// 				listsContainer : 'lists-container',
+			// 				header : 'header',
+			// 				footer : 'footer'
+			// 			}
+			// 		});
+			// 	}
+			// });
+
 			// rendaaah!
 			res.render('index', {
 				title : 'Lystr',
+				ratr : req.session.ratr,
 				xyz : '.xyz',
 				lists : lists,
 				isAdmin : false,
+				notLoggedIn : notLoggedIn,
+				loggedIn : loggedIn,
 				partials : {
 					listsContainer : 'lists-container',
 					header : 'header',
@@ -119,6 +186,20 @@ function signupPOST (req, res, next) {
 	var password = req.body.password;
 	var confirmPassword = req.body.confirmPassword;
 
+
+	// if (input correct)
+		// if (ratr)
+			// if (ratr.facebook)
+				// merge accounts
+				// update password
+			// else
+				// err: email oredy in use
+		// else
+			// create new ratr
+			// save new ratr
+	// else
+		// err: incorrect input
+
 	ListRatr.findOne({email : email}, function (err, ratr) {
 		if (err) {
 			res.send(err);
@@ -139,6 +220,12 @@ function signupPOST (req, res, next) {
 			}
 		}
 	});
+}
+
+function signout (req, res, next) {
+	console.log('signing out');
+	req.session.reset();
+	res.redirect('/');
 }
 
 function signinGET (req, res, next) {
@@ -177,9 +264,23 @@ function signinPOST (req, res, next) {
 function profileGET (req, res, next) {
 	var ratr = req.session.ratr;
 
-	if (ratr) 
-		res.send(ratr);
-	else 
+	if (ratr) {
+
+		var notLoggedIn = false;
+		var loggedIn = true;
+
+		res.render('profile', {
+			title : 'Lystr',
+			xyz : '.xyz',
+			ratr : ratr,
+			notLoggedIn : notLoggedIn,
+			loggedIn : loggedIn,
+			partials : {
+				header : 'header',
+				footer : 'footer'
+			}
+		});
+	} else 
 		res.send('bad: ratr undefined');
 }
 
@@ -188,6 +289,7 @@ function listsGET (req, res, next) {
 	var ratr = req.session.ratr;
 
 	// get nComments
+	var loggedIn = false, notLoggedIn = true;
 
 	// get first list from db
 	List.find({}, function (err, lists) {
@@ -199,11 +301,18 @@ function listsGET (req, res, next) {
 			// rank now! (based on likes for now)
 			lists = sortByLikes(lists);
 
+			if (req.session.ratr) {
+				loggedIn = true;
+				notLoggedIn = false;
+			}
+
 			// rendaaah!
 			res.render('lists', {
 				title : 'Lystr - Lists',
 				lists : lists,
 				isAdmin : false,
+				loggedIn : loggedIn,
+				notLoggedIn : notLoggedIn,
 				partials : {
 					listsContainer : 'lists-container',
 					header : 'header',
@@ -278,6 +387,19 @@ function getOneListByName (req, res, next) {
 				return (a.score < b.score);
 			});
 
+			// for (i in listItems) {
+			// 	listItem = listItems[i];
+				
+			// }
+
+			var loggedIn = false;
+			var notLoggedIn = true;
+
+			if (req.session.ratr) {
+				loggedIn = true;
+				notLoggedIn = false;
+			}
+
 			console.log('\nlistItems AFTER SORT:');
 			console.log(listItems);
 
@@ -285,6 +407,13 @@ function getOneListByName (req, res, next) {
 				title : 'Lystr',
 				listTitle : list.title,
 				list : list,
+			// 	listItems : listItems.sort(function (a, b) {
+			// 	return (a.score < b.score);
+			// }),
+
+				loggedIn : loggedIn,
+				notLoggedIn : notLoggedIn,
+
 				listItems : listItems,
 				upVotes : upVotes,
 				downVotes :downVotes,
@@ -343,9 +472,19 @@ function CreateListGET (req, res, next) {
 	// get ratr
 	var ratr = req.session.ratr;
 
+	var loggedIn = false, notLoggedIn = true;
+	if (ratr) {
+		loggedIn = true;
+		notLoggedIn = false;
+	}
+
 	// render create list page
 	res.render('create-list', {
 		title : 'Lystr - Create List',
+
+		loggedIn : loggedIn,
+		notLoggedIn : notLoggedIn,
+
 		partials : {
 			header : 'header',
 			footer : 'footer-create-lists'
@@ -383,6 +522,7 @@ function createListPOST (req, res, next) {
 		// id : new ObjectId(),
 		dateCreated: new Date(),
 		owner : ratr._id,
+		profilePicture : ratr.profilePicture,
 
 		//* MAIN INFORMATION *//
 		title : listTitle,

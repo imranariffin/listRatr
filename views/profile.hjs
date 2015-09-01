@@ -1,0 +1,24 @@
+{{>header}}
+
+<div class="panel panel-default">
+	<div class="panel-heading" style="text-align:center;font-size:19px;">
+		<b>Lystr Profile</b>
+	</div>
+  	<div class="panel-body">
+  	<!-- {{ratr}} -->
+  	<div style="width:100%;position:relative;height:100%;">
+	  	<div style="width:10%;height:100%;float:left;overflow:hidden;">
+	  		<img src="{{ratr.profilePicture}}" style="border-radius:50%;width:70px;height:70px;">
+	  	</div>
+	  	<div style="width:90%;height:100%;float:left;overflow:hidden;">
+	  		<ul class="list-group">
+		    	<li class="list-group-item">Email : {{ratr.email}}</li>
+		    	<li class="list-group-item">Top Lists : {{ratr.lists}}</li>
+		    	<li class="list-group-item">Top Comments : {{ratr.comments}}</li>
+			</ul>
+	  	</div>
+	</div>
+  	</div>
+</div>
+
+{{>footer}}

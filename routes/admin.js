@@ -141,16 +141,34 @@ router.get('/back-to-sq-1', function (req, res, next) {
 						next();
 				});
 			}
-
-			// lists.save(function (err) {
-			// 	if (err)
-			// 		res.send(err);
-			// 	else
-			// 		res.next();
-			// });
-			// next();
 		}
 	});
+
+}, function (req, res, next) {
+
+	ListRatr.find({}, function (err, ratrs) {
+		if (err) {
+			res.send(err);
+		} else if (!ratrs) {
+			res.send('no ratr available');
+		} else {
+			for (i in ratrs) {
+				var ratr = ratrs[i];
+				ratr.nComments = 0;
+				ratr.likes = [];
+				ratr.votes.up = [];
+				ratr.votes.down = [];
+				ratr.comments = [];
+				ratr.save(function (err) {
+					if (err)
+						res.send(err);
+					else
+						next();
+				});
+			}
+		}
+	});
+	
 }, function (req, res, next) {
 	res.send('done resetting');
 });

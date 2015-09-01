@@ -119,6 +119,14 @@ function updateSession (req, res, next) { //user next() for next middleware
 
   console.log('\n');
   console.log("in updateSession()");
+
+  console.log('\n');
+  console.log('req.session:');
+  console.log(req.session);
+
+  console.log('\n');
+  console.log('req.ratr:');
+  console.log(req.ratr);
   console.log('\n');
 
   if (req.session && req.session.ratr) {

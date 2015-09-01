@@ -23,11 +23,21 @@
 	  <div class="btn-group" role="group">
 	    <a href="/createList"><button type="button" class="btn btn-default">Create New List</button></a>
 	  </div>
+	  {{#notLoggedIn}}
 	  <div class="btn-group" role="group">
 	    <a href="/signin"><button type="button" class="btn btn-default"><img style="height:60%;width:5%;" src="/images/facebook_logo_detail_small.png">&nbsp Signin as a Lystr</button></a>
 	  </div>
 	  <div class="btn-group" role="group">
 		<a href="/signup"><button type="button" class="btn btn-default"><img style="height:60%;width:5%;" src="/images/facebook_logo_detail_small.png">&nbsp Be a Lystr</button></a>	  
 	  </div>
+	  {{/notLoggedIn}}
+	  {{#loggedIn}}
+	  <div class="btn-group" role="group">
+	    <a href="/lystr"><button type="button" class="btn btn-default">&nbsp View Profile</button></a>
+	  </div>
+	  <div class="btn-group" role="group">
+		<a href="/signout"><button type="button" class="btn btn-default">&nbsp Sign Out</button></a>	  
+	  </div>
+	  {{/loggedIn}}
 	</div>	
 	<br>

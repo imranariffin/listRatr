@@ -12,6 +12,7 @@ var ListRatr = mongoose.model('ListRatr', new Schema ({
 	firstName : String,
 	lastName : String,
 	dateJoined : Date,
+	profilePicture : {type : String, default : ""},
 	// auth
 	password : String,
 

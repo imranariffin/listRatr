@@ -11,6 +11,8 @@ var List = mongoose.model('List', new Schema ({
 	title : String,
 	dateCreated: Date,
 	owner : String,
+	// profile picture of owner
+	profilePicture : String,
 
 	//* MAIN INFORMATION *//
 
