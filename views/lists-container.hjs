@@ -13,14 +13,14 @@
         <!-- </div> -->
 
   	<!-- <div style="width:100%;position:inherit;height:100%;"> -->
-	  	<div style="width:90%;height:100%;float:left;overflow:hidden;">
+	  	<div style="width:93%;height:100%;float:left;overflow:hidden;">
           <a href="/lists{{url}}" style="text-decoration:none;"><b>{{ title }} </b> </a> <br> <span id="likeId-{{_id}}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <span class="likeValue" id="likeValue-{{_id}}">{{ likes }}</span> | <span id="btn-share" style="color:grey;">share</span> | <span style="color:grey">{{nComments}} comments</span> 
           {{#wasListerized}}
           | <span class="articleSource" style="color:grey;">source: <a href="{{articleSource.fullUrl}}">{{articleSource.baseUrl}}</a></span>
           {{/wasListerized}}
 	  	</div>
-	  	<div style="width:10%;height:100%;float:left;overflow:hidden;">
-	  	<img src="{{profilePicture}}" style="border-radius:50%;">
+	  	<div style="width:7%;height:100%;float:left;overflow:hidden;">
+	  	<img src="{{profilePicture}}" style="border-radius:50%;height:70%;">
 	  	</div>
 	<!-- </div> -->
   

@@ -21,13 +21,16 @@
 			<!-- List group -->
 			<ul class="list-group">
 				<li class="list-group-item" id="list-group-item0">
-					<div class="panel panel-default" id="panel0"><div class="panel-heading" id="panel-heading0">
+					<div class="panel panel-default list-item" id="panel0"><div class="panel-heading" id="panel-heading0">
 						<input type="text" class="input-text" id="input-text-title0" name="panelTitle" style="display: none;">
 						<h3 id="panel-title0" class="panel-title">Panel title 1</h3>
 					</div>
 					<div class="panel-body" id="panel-body0">
-						<textarea class="input-text" id="input-text0" name="panelBody" style="display: none;"></textarea>
+						<textarea class="input-text" id="input-text0" name="panelBody" style="display: none;width:100%;height:150px;"></textarea>
 						<div class="item-content" id="item-content0">Item Body 1</div>
+					</div>
+					<div class="panel-footer" id="panel-footer1">
+						<span style="color:grey;font-size:11px;">add comments</span>
 					</div>
 				</li>
 			</ul>		    

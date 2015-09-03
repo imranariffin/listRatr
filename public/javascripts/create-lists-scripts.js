@@ -1,4 +1,12 @@
 $(function () {
+
+	$(document).ready(function () {
+		/* always show first input to let lystrs 
+		know what to do on this create-/list*/
+		$('.input-text').show();
+	});
+
+
 	$('#btn-additem').click(function(){
 
 		// hide all previously created input-text
@@ -360,7 +368,7 @@ function createListItemWithPanel(listSize) {
 		.appendTo('.list-group');
 	// create PANEL, insert into list-item
 	jQuery("<div/>")
-		.addClass("panel panel-default")
+		.addClass("panel panel-default list-item")
 		.attr('id', 'panel' + listSize)
 		.appendTo($('.list-group-item').last());
 	// create PANEL-HEADING, insert into panel
@@ -368,7 +376,7 @@ function createListItemWithPanel(listSize) {
 		.addClass("panel-heading")
 		.attr('id', 'panel-heading' + listSize)
 		// .text("Panel Title" + listSize)	
-		.appendTo($('.panel').last());
+		.appendTo($('.list-item').last());
 	// create INPUT-TEXT-TITLE, insert into panel-heading
 	jQuery("<input type='text'/>")
 		.addClass("input-text")
@@ -386,7 +394,7 @@ function createListItemWithPanel(listSize) {
 	jQuery("<div/>")
 		.addClass("panel-body")
 		.attr('id', 'panel-body' + listSize)
-		.appendTo($('.panel').last());			
+		.appendTo($('.list-item').last());			
 	// create INPUT-TEXT, insert into panel-body
 	jQuery("<textarea/>")
 		.addClass("input-text")
@@ -403,8 +411,60 @@ function createListItemWithPanel(listSize) {
 	jQuery("<div/>")
 		.addClass("panel-footer")
 		.attr('id', 'panel-footer' + listSize)
-		.appendTo($('.panel')).last()
+		.appendTo($('.list-item').last())
 		.text("add comments");
+
+	// // create LIST-ITEM, insert into list
+	// jQuery("<li class='list-group-item'/>")
+	// 	.attr("id", "list-group-item" + listSize)
+	// 	.appendTo('.list-group');
+	// // create PANEL, insert into list-item
+	// jQuery("<div/>")
+	// 	.addClass("panel panel-default")
+	// 	.attr('id', 'panel' + listSize)
+	// 	.appendTo($('.list-group-item').last());
+	// // create PANEL-HEADING, insert into panel
+	// jQuery("<div/>")
+	// 	.addClass("panel-heading")
+	// 	.attr('id', 'panel-heading' + listSize)
+	// 	// .text("Panel Title" + listSize)	
+	// 	.appendTo($('.panel').last());
+	// // create INPUT-TEXT-TITLE, insert into panel-heading
+	// jQuery("<input type='text'/>")
+	// 	.addClass("input-text")
+	// 	.attr('id', 'input-text-title' + listSize)
+	// 	.attr('name', 'panelTitle')
+	// 	.appendTo($('.panel-heading').last());
+	// // create PANEL-TITLE, insert into panel-heading
+	// jQuery("<h3/>", {
+	// 	text : "Panel title " + listSize
+	// })
+	// 	.attr('id', 'panel-title' + listSize)
+	// 	.addClass("panel-title")
+	// 	.appendTo($('.panel-heading').last());		
+	// // create PANEL-BODY, insert into panel
+	// jQuery("<div/>")
+	// 	.addClass("panel-body")
+	// 	.attr('id', 'panel-body' + listSize)
+	// 	.appendTo($('.panel').last());			
+	// // create INPUT-TEXT, insert into panel-body
+	// jQuery("<textarea/>")
+	// 	.addClass("input-text")
+	// 	.attr('id', 'input-text' + listSize)
+	// 	.attr('name', 'panelBody')
+	// 	.appendTo($('.panel-body').last());		
+	// // create ITEM-CONTENT, insert into panel-body
+	// jQuery("<div/>")
+	// 	.addClass("item-content")
+	// 	.attr('id', 'item-content' + listSize)		
+	// 	.text("Item Body " + listSize)
+	// 	.appendTo($('.panel-body').last());		
+	// // create PANEL-FOOTER, insert into panel
+	// jQuery("<div/>")
+	// 	.addClass("panel-footer")
+	// 	.attr('id', 'panel-footer' + listSize)
+	// 	.appendTo($('.panel')).last()
+	// 	.text("add comments");
 }
 
 ///////////////////////////
