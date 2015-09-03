@@ -175,17 +175,19 @@ function redirectToMain (req, res) {
         // res.redirect('/dashboard');
         res.redirect('/');
       } else {
-        console.log('error: no user found');
+        console.log('error: no such user found in db');
         // res.send('error: no user found');
         // no user found, therefore create one using req.session
         var ratr = req.session.ratr;
 
-        ratr.save(function (err) {
-          if (err)
-            res.send(err);
-          else
-            res.send(ratr);
-        });
+        // ratr.save(function (err) {
+        //   if (err)
+        //     res.send(err);
+        //   else
+        //     res.send(ratr);
+        // });
+        // res.send(ratr);
+        res.redirect('/');
       }
     } else {
       console.log('Error: ' + err);

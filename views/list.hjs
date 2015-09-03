@@ -40,10 +40,10 @@
 							 
 						</div>
 						<div class="panel-body" id="item-body-{{_id}}">{{content}}</div>
-						<div class="panel-footer" style="color:grey;font-size:11px;"><span class="add-comment" id="add-comment-{{_id}}">add comment</span><br>
+						<div class="panel-footer" id="panel-footer-{{_id}}" style="color:grey;font-size:11px;"><span class="add-comment" id="add-comment-{{_id}}">add comment</span><br>
               				<input name="comments" type="text" class="form-control comment" id="commentsInput-{{_id}}" placeholder="add comments" aria-describedby="basic-addon1">
               				{{#comments}}
-              				<span id="comments-{{_id}}">{{text}} -- {{commenter}}</span>
+              				<span id="comments-{{_id}}">{{text}} -- <a id="commentor-{{commenter}}" class="commentor" href="/profile/{{data.commentor.email}}">{{commenter}}</a></span><br>
               				{{/comments}}
             			</div>
 					</div>

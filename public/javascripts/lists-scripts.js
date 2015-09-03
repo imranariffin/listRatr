@@ -24,96 +24,107 @@ $(function () {
       console.log($(this));
     });
 
-    $('.form-control').bind("enterKey", function (e) {
-       // update comments view field, 
-       // then update comments to db
+    /******  COMMENTS  ******/
 
-       var commentsText = e.target.value;
-       var commentId = e.target.id;
-       var commentId = getCommentIdFromInput(commentId);
-
-       var listId = $('#listId').val();
-
-       // TEST
-       console.log('commentId:');
-       console.log(commentId);
-       console.log('listId:');
-       console.log(listId);
-
-       $.ajax({
-        type : 'POST',
-        url : '/postComments',
-        data : {
-          commentsText : commentsText,
-          commentId : commentId,
-          listId : listId
-        },
-        success : function (data) {
-          // 
-
-          if (data ==' err')
-            return undefined;
-
-          console.log('success posting comments');
-          console.log('success data:');
-          console.log(data);
-          console.log('typeof(data):');
-          console.log(typeof(data));
-          // console.log("data.indexOf('err'):");
-          // console.log(data.indexOf('err'));
-
-          // line break
-          $('<br>').appendTo('.panel-footer');
-          if (String(data).indexOf('err') === -1) {
-            $('<span/>').text(commentsText + " -- ")
-            .append("<a href='/profile/" + data.commentor.email + "'>" + data.commentor.email + " </a>")
-            .appendTo('.panel-footer');
-          } else {
-            // sends error message: must login to comment
-            $('<br>').prependTo('.panel-footer');
-            $('<span/>').text("please signup or signin to comment")
-            .attr('style', 'color:red;')
-            .prependTo('.panel-footer');
-          }
-
-          // clear comments input field
-          $('.comment').val('');
-        },
-        error : function (data) {
-          console.log('err data:');
-          console.log(data);
-        }
-
-       })
-    });
-    $('.form-control').keyup(function (e) {
-        console.log('keyCode: ');
-        console.log(e.keyCode);
-        if (e.keyCode == 13)
-        {
-            $(this).trigger("enterKey");
-        }
-    });
+    // post new comment
+    postNewComment();
 
     // update poster information: get poster username and display it
     var ratrId = getRatrIdFromListPoster($('.list-poster').text());
     console.log('\n\n\n\n\nratrId:');
     console.log(ratrId);
     console.log('\n\n\n\n\n');
+
+    if (ratrId.length != 0)
+      $.ajax({
+        type : 'GET',
+        url : '/ratr/' + ratrId,
+        data : {},
+        success : function (data) {
+          console.log('success upvote');
+          console.log('data:');
+          console.log(data);
+          $('.list-poster').text('posted by ' + data.email);
+        },
+        error : function (data) {
+          console.log('\n\nerr: data:');
+          console.log(data);
+          console.log('\n');
+        },
+        dataType : 'json'
+      });
+
+    // updateCommentors()
+    // update commentors: displayCommentorId() --> displayCommentorEmail()
+    var commentorIds = [];
+
+    $('.commentor').each(function (i, e) {
+      var text = $(this).text();
+      // console.log('INSIDE .commentor:');
+      // console.log('text:');
+      // console.log(text);
+
+      // clean text from whitespace
+      while (text.indexOf(' ') != -1) {
+        text = text.replace(' ', '');
+      }
+
+      commentorIds.push(text);
+    });
+
+    // commentorIds = getCommentorIds($('.commentor').text());
+
+
+    console.log('commentorIds:');
+    console.log(commentorIds);
+
+    commentorIdsQuery = commentorIds.join();
+
+    console.log('commentorIdsQuery:');
+    console.log(commentorIdsQuery);
+
     $.ajax({
       type : 'GET',
-      url : '/ratr/' + ratrId,
-      data : {},
-      success : function (data) {
-        console.log('success upvote');
-        console.log('data:');
-        console.log(data);
-        $('.list-poster').text('posted by ' + data.email);
+      url : '/lystrs?lystrIds=' + commentorIdsQuery,
+      success : function (response) {
+        // console.log('succes INSIDE updateCommentors():');
+        // console.log('response:');
+        // console.log(response);
+        // console.log(response.email);
+        var commentors = response;
+
+        // commentors.forEach(function (e, i, arr) {
+        //   var commentorId = String(e._id);
+        //   var commentorEmail = e.email;
+
+        //   console.log('commentorId:');
+        //   console.log(commentorId);
+
+        //   $('#commentor-' + commentorId).attr('href', '/profile/' + commentorId);
+        //   $('#commentor-' + commentorId).text(commentorEmail);
+        // });
+
+        $('.commentor').each(function (i, e) {
+          var commentor = $(this);
+          // console.log('$(this):');
+          // console.log($(this));
+
+          commentorId = commentor.text();
+          commentors.forEach(function (e) {
+            if (e._id == commentorId) {
+              commentor.text(e.email);
+              commentor.attr('href', '/lystr/' + commentorId);
+            }
+          });
+        });
+
+        // $('#commentor-' + commentorId).attr('href', '/profile/' + String(commentor._id));
+        // $('#commentor-' + commentorId).text(commentor.email);
       },
-      error : function (data) {
-        console.log('\n\nerr: data:');
-        console.log(data);
-        console.log('\n');
+      error : function (response) {
+        console.log('err INSIDE updateCommentors()');
+        console.log('response:');
+        console.log(response);
       },
       dataType : 'json'
     });
@@ -125,8 +136,8 @@ $(function () {
   // update upvotes and downvotes status
   for (i in $('.arrow-down, .arrow-up')) {
     var btnVote = $('.arrow-down, .arrow-up')[i];
-    console.log('btnVote:');
-    console.log(btnVote);
+    // console.log('btnVote:');
+    // console.log(btnVote);
   }
 
   $('.arrow-down, .arrow-up').click(function () {
@@ -138,16 +149,14 @@ $(function () {
 
     if ($(this).hasClass('arrow-up')) {
 
-      // url = '/upVote'
-
-      // TEST
-      console.log('$(this).hasClass(arrow-up):');
-      console.log($(this).hasClass('arrow-up'));
-      console.log(
-        $(this).parent().children('.netVote')
-        .text()
-        );
-      console.log("$(this).parent().children('.netVote').text()");        
+      // // TEST
+      // console.log('$(this).hasClass(arrow-up):');
+      // console.log($(this).hasClass('arrow-up'));
+      // console.log(
+      //   $(this).parent().children('.netVote')
+      //   .text()
+      //   );
+      // console.log("$(this).parent().children('.netVote').text()");        
 
       // if oredy on, cancel upvote
       // if not, do upvote
@@ -189,9 +198,9 @@ $(function () {
 
     } else if ($(this).hasClass('arrow-down')) {
 
-      // TEST
-      console.log('$(this).hasClass(arrow-up):');
-      console.log($(this).hasClass('arrow-up'));  
+      // // TEST
+      // console.log('$(this).hasClass(arrow-up):');
+      // console.log($(this).hasClass('arrow-up'));  
 
       // if oredy on, cancel upvote
       // if not, do upvote
@@ -256,6 +265,58 @@ $(function () {
     });
 
   }); 
+
+  /********  /LIKES   *********/
+
+  // use api to whether show 'you liked this list' or not
+  $('.likeValue').each(function () {
+
+    var likeValue = $(this);
+
+    // get likeId from likeValue-listID
+    var likeValueId = likeValue.attr('id');
+    var listId = likeValueId.slice(likeValueId.indexOf('-')+1, likeValueId.length);
+
+    // TEST
+    console.log('INSIDE likeValue.each()');
+    console.log('likeValueId:');
+    console.log(likeValueId);
+    console.log('listId:');
+    console.log(listId);
+
+    // use api to determine
+    $.ajax({
+      type : 'GET',
+      url : '/do-you-like-this/' + listId,
+      // data : likeFormData,
+      success : function (response) {
+
+        console.log('response:');
+        console.log(response);
+
+        if (response.answer === true) {
+          // show 'you liked this list'
+          // append to likeValue span
+          var likes = $('#' + likeValueId).text();
+          // $('#' + likeValueId).text(likes + ' you liked this list');
+          $("<span style='color:grey;'> you liked this list </span>").appendTo('#' + likeValueId);
+
+          // TEST
+          var resultantText = $('#' + likeValueId).text();
+          console.log('resultantText:');
+          console.log(resultantText)
+        }
+        // else
+          // do nothing
+      },
+      error : function (data) {
+        console.log('\n\nerr: data:');
+        console.log(data);
+        console.log('\n');
+      },
+      dataType : 'json'
+    });
+  });
 
   // user likes a list
   $(".glyphicon-thumbs-up").click(event, function(event) {
@@ -337,14 +398,106 @@ $(function () {
 
 });
 
+/******  COMMENTS  ******/
+
+function postNewComment () {
+    $('.form-control').bind("enterKey", function (e) {
+       // update comments view field, 
+       // then update comments to db
+
+       var commentsText = e.target.value;
+       var commentId = e.target.id;
+       var commentId = getCommentIdFromInput(commentId);
+       var listId = $('#listId').val();
+
+       // TEST
+       console.log('commentId:');
+       console.log(commentId);
+       console.log('listId:');
+       console.log(listId);
+
+       if (commentsText.length != 0)
+        $.ajax({
+          type : 'POST',
+          url : '/postComments',
+          data : {
+            commentsText : commentsText,
+            commentId : commentId,
+            listId : listId
+          },
+          // success : appendNewComment,
+          success : function (comment) {
+            if (comment ==' err')
+              return undefined;
+
+            // line break
+            $('<br>').appendTo('#panel-footer-' + commentId);
+            if (String(comment).indexOf('err') === -1) {
+              $('<span/>').text(commentsText + " -- ")
+              .append("<a href='/profile/" + comment.commentor.email + "'>" + comment.commentor.email + " </a>")
+              .appendTo('#panel-footer-' + commentId);
+            } else {
+              // sends error message: must login to comment
+              $('<br>').prependTo('#panel-footer-' + commentId);
+              $('<span/>').text("please signup or signin to comment")
+              .attr('style', 'color:red;')
+              .prependTo('#panel-footer-' + commentId);
+            }
+
+            // clear comments input field
+            $('.comment').val('');
+          },
+          error : function (data) {
+            console.log('err data:');
+            console.log(data);
+          }
+        });
+    });
+    $('.form-control').keyup(function (e) {
+        console.log('keyCode: ');
+        console.log(e.keyCode);
+        if (e.keyCode == 13)
+        {
+            $(this).trigger("enterKey");
+        }
+    });
+}
+
 function getCommentIdFromInput (_commentId) {
   return _commentId.slice(_commentId.indexOf('-')+1, _commentId.length);
+}
+
+function appendNewComment (comment) {
+
+  if (comment ==' err')
+    return undefined;
+
+  // line break
+  $('<br>').appendTo('.panel-footer');
+  if (String(comment).indexOf('err') === -1) {
+    $('<span/>').text(commentsText + " -- ")
+    .append("<a href='/profile/" + comment.commentor.email + "'>" + comment.commentor.email + " </a>")
+    .appendTo('.panel-footer');
+  } else {
+    // sends error message: must login to comment
+    $('<br>').prependTo('.panel-footer');
+    $('<span/>').text("please signup or signin to comment")
+    .attr('style', 'color:red;')
+    .prependTo('.panel-footer');
+  }
+
+  // clear comments input field
+  $('.comment').val('');
 }
 
 function getRatrIdFromListPoster (listPosterVal) {
   console.log('listPosterVal:');
   console.log(listPosterVal);
   return listPosterVal.slice('posted by '.length, listPosterVal.length);
+}
+
+function getCommentorIds (commentorId) {
+  return String(commentorId);
 }
 
 // likeId is a string = event.target.id
@@ -396,3 +549,4 @@ function hyphenateTitle (formalizedTitle) {
       return e;
   }).join('');
 }
+

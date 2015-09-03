@@ -16,6 +16,13 @@ var List = mongoose.model('List', new Schema ({
 
 	//* MAIN INFORMATION *//
 
+	// if created using listrization, must show source
+	wasListerized : {type : Boolean, default : false},
+	articleSource : {
+		baseUrl : {type : String, default : ""},
+		fullUrl : {type : String, default : ""}
+	},
+
 	// unique url based on list title,
 	// title, however, does not have to be unique
 	url : String,
