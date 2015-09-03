@@ -400,6 +400,7 @@ function createListItemWithPanel(listSize) {
 		.addClass("input-text")
 		.attr('id', 'input-text' + listSize)
 		.attr('name', 'panelBody')
+		.attr('style', 'width:100%;height:150px;')
 		.appendTo($('.panel-body').last());		
 	// create ITEM-CONTENT, insert into panel-body
 	jQuery("<div/>")
