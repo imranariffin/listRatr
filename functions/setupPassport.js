@@ -18,6 +18,37 @@ function setupPassport (app, passport) {
   passport.deserializeUser(function (obj, done) {
     done(null, obj);
   });
+  // passport.serializeUser(function (user, done) {
+
+  //   // TEST
+  //   console.log('INSIDE serializeUser():');
+  //   console.log('user:');
+  //   console.log(user);
+  //   console.log('user.id');
+  //   console.log(user.id);
+
+  //   // done(null, user.id);
+  //   done(null, user);
+  // });
+  // passport.deserializeUser(function (id, done) {
+    
+  //   //  TEST
+  //   console.log('INSIDE deserializeUser():');
+  //   console.log('id:');
+  //   console.log(id);
+
+  //   ListRatr.findById(id, function (err, user) {
+  //     if (err) {
+  //       console.log(err);
+  //       done(err, null);
+  //     } else {
+  //       console.log('user:');
+  //       console.log(user);
+  //       done(null, user);
+  //     }
+  //   });
+  //   // done(null, obj);
+  // });
 
   //Facebook Strategy
   passport.use(new FacebookStrategy({
@@ -46,6 +77,11 @@ function setupPassport (app, passport) {
 
         //find user using profile given be Facebook
         var facebookEmail = profile.emails[0].value;
+
+        // TEST
+        console.log('facebookEmail:');
+        console.log(facebookEmail);
+
         ListRatr.findOne({ email : facebookEmail }, function (err, ratr) {
           //check for error
           if (err) {
@@ -66,18 +102,19 @@ function setupPassport (app, passport) {
               ratr.facebook = {
                 profile : profile,
                 accessToken : accessToken,
-                refreshToken : refreshToken
+                refreshToken : refreshToken,
+                isLinked : true
               };
               // // save ratr update
-              ratr.save();
-              // ratr.save(function (err) {
-              //   if (err) {
-              //     return done(err, null);
-              //   } else {
-              //     // save profile to req.session.passport
-              //     return done(null, profile);
-              //   }
-              // });
+              // ratr.save();
+              ratr.save(function (err) {
+                if (err) {
+                  return done(err, null);
+                } else {
+                  // save profile to req.session.passport
+                  return done(null, profile);
+                }
+              });
 
               // TEST
               console.log('TEST\n');
@@ -86,13 +123,19 @@ function setupPassport (app, passport) {
               console.log(ratr);
               console.log('\n');
 
+              // // save to req.session.passport
+              return done(null, profile);
+
             } else {
               // proceed
               console.log('TEST\n');
               console.log('proceed');              
               console.log('ratr: oredy has .facebook');
               console.log(ratr);
-              console.log('\n');              
+              console.log('\n');
+
+              // save to req.session.passport
+              return done(null, profile);
             }
           } else {
             //update db with profile provided by Facebook
@@ -122,15 +165,10 @@ function setupPassport (app, passport) {
             // halfRandomUsername += String(Math.round(Math.random()*10));
             // halfRandomUsername += String(Math.round(Math.random()*10));
 
-
             // console.log('TEST');
             // console.log('half-random username:');
             // console.log(halfRandomUsername);
             // console.log('');
-            // user.facebook = {
-            //  id     : profile.id,
-            //  token  : accessToken
-            // }
 
             console.log("TEST");
             console.log('adding facebook account:');
@@ -138,20 +176,23 @@ function setupPassport (app, passport) {
             console.log(ratr.facebook);
             console.log("TEST END");
 
-            // //update db
-            // ratr.save(function (err) {
-            //   if (err) {
-            //     console.log('err: ' + err);
-            //   } else {
-            //     console.log('save in db success');
-            //     return done(null, profile);
-            //   }
-            // });
-            ratr.save();
+            //update db
+            ratr.save(function (err) {
+              if (err) {
+                console.log('err: ' + err);
+              } else {
+                console.log('save in db success');
+                return done(null, profile);
+              }
+            });
+            // ratr.save();
+
+            // // save to req.session.passport
+            // return done(null, profile);
           }
         });
 
-        return done(null, profile);
+        // return done(null, profile);
       });
     }
   ));

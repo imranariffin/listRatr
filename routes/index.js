@@ -285,41 +285,42 @@ function upVote (req, res, next) {
 						if (err)
 							res.send(err);
 						else {
+							console.log('\naction:');
+							console.log(action);
 							if (action === '0To1') {
-								console.log('\nlist.items:');
-								console.log(list.items);
+								
 								list.items = updateItemScore(itemId, list.items, 1);
-								console.log('\n\nafter\nlist.items:');
-								console.log(list.items);
 								ratr.votes.up.push(itemId);
-								// ratr.votes.down.pop(itemId);
+								ratr.votes.down.pop(itemId);
+
 							} else if (action === '0To-1') {
-								console.log('\nlist.items:');
-								console.log(list.items);
+								
 								list.items = updateItemScore(itemId, list.items, -1);
-								console.log('\n\nafter\nlist.items:');
 								ratr.votes.down.push(itemId);
-								// ratr.votes.up.pop(itemId);
+								ratr.votes.up.pop(itemId);
+
 							} else if (action === '-1To1') {
-								console.log('\nlist.items:');
-								console.log(list.items);
+
 								list.items = updateItemScore(itemId, list.items, 2);
-								console.log('\n\nafter\nlist.items:');
 								ratr.votes.up.push(itemId);
 								ratr.votes.down.pop(itemId);
+
 							} else if (action === '1To-1') {
-								console.log('\nlist.items:');
-								console.log(list.items);
+
 								list.items = updateItemScore(itemId, list.items, -2);
-								console.log('\n\nafter\nlist.items:');
 								ratr.votes.up.pop(itemId);
 								ratr.votes.down.push(itemId);
+
 							} else if (action === '-1To0') {
+
 								list.items = updateItemScore(itemId, list.items, 1);
 								ratr.votes.down.pop(itemId);
+
 							} else if (action === '1To0') {
+
 								list.items = updateItemScore(itemId, list.items, -1);
 								ratr.votes.up.pop(itemId);
+
 							}
 
 							list.save();

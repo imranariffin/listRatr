@@ -2,6 +2,7 @@
 $(function () {
 
   // $('.')
+  $('.share-link').hide();
 
   // test stackoverflow upvote button
   $('.vote').click(function () {
@@ -10,19 +11,9 @@ $(function () {
   }); 
 
   $(document).ready(function() {
-    $('.arrow-down, .arrow-up').each(function () {
-      console.log('in arrow-up.each');      
-      console.log($(this).attr('class'));
-      console.log("$(this).siblings('.down')");
-      console.log($(this).siblings('.down'));
-      console.log($(this).siblings('.down').val());
-      if ($(this).siblings('.up').val() === 'true' && $(this).hasClass('arrow-up'))
-        $(this).addClass('on');
-      if ($(this).siblings('.down').val() === 'true' && $(this).hasClass('arrow-down'))
-        $(this).addClass('on');
-      console.log('$(this):');
-      console.log($(this));
-    });
+
+    // turns on of the tow arrows' color into orange if relevant
+    $('.arrow-down, .arrow-up').each(updateArrowColor);
 
     /******  COMMENTS  ******/
 
@@ -118,6 +109,7 @@ $(function () {
           });
         });
 
+
         // $('#commentor-' + commentorId).attr('href', '/profile/' + String(commentor._id));
         // $('#commentor-' + commentorId).text(commentor.email);
       },
@@ -131,8 +123,6 @@ $(function () {
 
   });
 
-  $('.share-link').hide();
-
   // update upvotes and downvotes status
   for (i in $('.arrow-down, .arrow-up')) {
     var btnVote = $('.arrow-down, .arrow-up')[i];
@@ -141,7 +131,7 @@ $(function () {
   }
 
   $('.arrow-down, .arrow-up').click(function () {
-      
+  
     var buttonId = event.target.id;
     var voteType = event.target.className;
     var itemId = getUpVoteId(buttonId);
@@ -161,6 +151,10 @@ $(function () {
       // if oredy on, cancel upvote
       // if not, do upvote
       if ($(this).hasClass('on')) {
+
+        // TEST
+        console.log('user cancels upvote (1 to 0)');
+
         // cancel  upvote ie decrement netVote
         $(this).parent().children('.netVote')
           .text(
@@ -171,6 +165,10 @@ $(function () {
         // update on db: inc by -1
         action = '1To0';
       } else {
+
+        // TEST
+        console.log('user upvotes (0 to 1)');
+
         // do upvote ie increment upvote
         $(this).parent().children('.netVote')
           .text(
@@ -184,6 +182,10 @@ $(function () {
 
       // double upvote if true
       if ($('.arrow-down').hasClass('on')) {
+
+        // TEST
+        console.log('Nope, user actually cancels downvote and then does upvotes (-1 to 1)');
+
         // do upvote ie increment upvote
         $(this).parent().children('.netVote')
           .text(
@@ -205,6 +207,10 @@ $(function () {
       // if oredy on, cancel upvote
       // if not, do upvote
       if ($(this).hasClass('on')) {
+
+        // TEST
+        console.log('user cancels downvotes (-1 to 0)');
+
         // cancel downvote ie increment netVote
         $(this).parent().children('.netVote')
           .text(
@@ -215,6 +221,10 @@ $(function () {
         // update on db: inc by 1
         action = '-1To0';        
       } else {
+
+        // TEST
+        console.log('user downvotes (0 to -1)');
+
         // do downvote ie decrement upvote
         $(this).parent().children('.netVote')
           .text(
@@ -228,6 +238,10 @@ $(function () {
 
       // double downvote if true
       if ($('.arrow-up').hasClass('on')) {
+
+        // TEST
+        console.log('Nope, user actually cancels upvote and then does downvote (1 to -1)');
+
         // do upvote ie increment upvote
         $(this).parent().children('.netVote')
           .text(
@@ -240,7 +254,7 @@ $(function () {
       // turn up-arrow to color grey (sorta de-clickit)
       $('.arrow-up').removeClass('on');       
     }
-    
+
     // if (voteType === 'arrow-up')
     // url
 
@@ -263,7 +277,6 @@ $(function () {
       },
       dataType : 'json'
     });
-
   }); 
 
   /********  /LIKES   *********/
@@ -295,16 +308,12 @@ $(function () {
         console.log(response);
 
         if (response.answer === true) {
-          // show 'you liked this list'
-          // append to likeValue span
+          // show 'you liked this'
           var likes = $('#' + likeValueId).text();
           // $('#' + likeValueId).text(likes + ' you liked this list');
-          $("<span style='color:grey;'> you liked this list </span>").appendTo('#' + likeValueId);
+          // $("<span style='color:grey;'> you liked this list </span>").appendTo('#' + likeValueId);
+          $('#you-liked-this-' + listId).attr('style', 'color:grey;display:inline;');
 
-          // TEST
-          var resultantText = $('#' + likeValueId).text();
-          console.log('resultantText:');
-          console.log(resultantText)
         }
         // else
           // do nothing
@@ -340,10 +349,11 @@ $(function () {
       url : '/like',
       data : likeFormData,
       success : likeSuccess,
-      error : function (data) {
-        console.log('\n\nerr: data:');
-        console.log(data);
+      error : function (response) {
+        console.log('\n\nerr: response:');
+        console.log(response);
         console.log('\n');
+
       },
       dataType : 'json'
     });
@@ -398,155 +408,149 @@ $(function () {
 
 });
 
-/******  COMMENTS  ******/
+////////////////////////////////////////////////
+/**************** FUNCTIONS *******************/
+// available at ../lists-scripts-functions.js //
+////////////////////////////////////////////////
 
-function postNewComment () {
-    $('.form-control').bind("enterKey", function (e) {
-       // update comments view field, 
-       // then update comments to db
+function updateArrowColor () {
 
-       var commentsText = e.target.value;
-       var commentId = e.target.id;
-       var commentId = getCommentIdFromInput(commentId);
-       var listId = $('#listId').val();
+  var arrow = $(this);
+  var isUpVoted = arrow.siblings('.up').val();
+  var isDownVoted = arrow.siblings('.down').val();
 
-       // TEST
-       console.log('commentId:');
-       console.log(commentId);
-       console.log('listId:');
-       console.log(listId);
+  // if arrow is an up arrow and upvoted,
+   // put the orange color on arrow-up
+  if (isUpVoted === 'true' && arrow.hasClass('arrow-up'))
+    arrow.addClass('on');
+  // if arrow is an up arrow and upvoted, 
+  // put the orange color on arrow-down instead
+  if (isDownVoted === 'true' && arrow.hasClass('arrow-down'))
+    arrow.addClass('on');
 
-       if (commentsText.length != 0)
-        $.ajax({
-          type : 'POST',
-          url : '/postComments',
-          data : {
-            commentsText : commentsText,
-            commentId : commentId,
-            listId : listId
-          },
-          // success : appendNewComment,
-          success : function (comment) {
-            if (comment ==' err')
-              return undefined;
-
-            // line break
-            $('<br>').appendTo('#panel-footer-' + commentId);
-            if (String(comment).indexOf('err') === -1) {
-              $('<span/>').text(commentsText + " -- ")
-              .append("<a href='/profile/" + comment.commentor.email + "'>" + comment.commentor.email + " </a>")
-              .appendTo('#panel-footer-' + commentId);
-            } else {
-              // sends error message: must login to comment
-              $('<br>').prependTo('#panel-footer-' + commentId);
-              $('<span/>').text("please signup or signin to comment")
-              .attr('style', 'color:red;')
-              .prependTo('#panel-footer-' + commentId);
-            }
-
-            // clear comments input field
-            $('.comment').val('');
-          },
-          error : function (data) {
-            console.log('err data:');
-            console.log(data);
-          }
-        });
-    });
-    $('.form-control').keyup(function (e) {
-        console.log('keyCode: ');
-        console.log(e.keyCode);
-        if (e.keyCode == 13)
-        {
-            $(this).trigger("enterKey");
-        }
-    });
 }
 
-function getCommentIdFromInput (_commentId) {
-  return _commentId.slice(_commentId.indexOf('-')+1, _commentId.length);
-}
+function upVoteOrDownVotePOST () {
+  
+  var buttonId = event.target.id;
+  var voteType = event.target.className;
+  var itemId = getUpVoteId(buttonId);
+  var action, url;
 
-function appendNewComment (comment) {
+  if ($(this).hasClass('arrow-up')) {
 
-  if (comment ==' err')
-    return undefined;
+    // // TEST
+    // console.log('$(this).hasClass(arrow-up):');
+    // console.log($(this).hasClass('arrow-up'));
+    // console.log(
+    //   $(this).parent().children('.netVote')
+    //   .text()
+    //   );
+    // console.log("$(this).parent().children('.netVote').text()");        
 
-  // line break
-  $('<br>').appendTo('.panel-footer');
-  if (String(comment).indexOf('err') === -1) {
-    $('<span/>').text(commentsText + " -- ")
-    .append("<a href='/profile/" + comment.commentor.email + "'>" + comment.commentor.email + " </a>")
-    .appendTo('.panel-footer');
-  } else {
-    // sends error message: must login to comment
-    $('<br>').prependTo('.panel-footer');
-    $('<span/>').text("please signup or signin to comment")
-    .attr('style', 'color:red;')
-    .prependTo('.panel-footer');
+    // if oredy on, cancel upvote
+    // if not, do upvote
+    if ($(this).hasClass('on')) {
+      // cancel  upvote ie decrement netVote
+      $(this).parent().children('.netVote')
+        .text(
+          Number($(this).parent().children('.netVote').text()) - 1
+        );
+      // toggle color
+      $(this).toggleClass('on');
+      // update on db: inc by -1
+      action = '1To0';
+    } else {
+      // do upvote ie increment upvote
+      $(this).parent().children('.netVote')
+        .text(
+          Number($(this).parent().children('.netVote').text()) + 1
+        );
+      // toggle color
+      $(this).toggleClass('on');
+      // update on db: inc by 1
+      action = '0To1';
+    }
+
+    // double upvote if true
+    if ($('.arrow-down').hasClass('on')) {
+      // do upvote ie increment upvote
+      $(this).parent().children('.netVote')
+        .text(
+          Number($(this).parent().children('.netVote').text()) + 1
+        );                
+      // update on db: inc by 2
+      action = '-1To1';
+    }
+
+    // turn down-arrow to color grey (sorta de-clickit)
+    $('.arrow-down').removeClass('on');
+
+  } else if ($(this).hasClass('arrow-down')) {
+
+    // // TEST
+    // console.log('$(this).hasClass(arrow-up):');
+    // console.log($(this).hasClass('arrow-up'));  
+
+    // if oredy on, cancel upvote
+    // if not, do upvote
+    if ($(this).hasClass('on')) {
+      // cancel downvote ie increment netVote
+      $(this).parent().children('.netVote')
+        .text(
+          Number($(this).parent().children('.netVote').text()) + 1
+        );
+      // toggle color
+      $(this).toggleClass('on');
+      // update on db: inc by 1
+      action = '-1To0';        
+    } else {
+      // do downvote ie decrement upvote
+      $(this).parent().children('.netVote')
+        .text(
+          Number($(this).parent().children('.netVote').text()) - 1
+        );      
+      // toggle color   
+      $(this).toggleClass('on');
+      // update on db: inc by -1
+      action = '0To-1';
+    }
+
+    // double downvote if true
+    if ($('.arrow-up').hasClass('on')) {
+      // do upvote ie increment upvote
+      $(this).parent().children('.netVote')
+        .text(
+          Number($(this).parent().children('.netVote').text()) - 1
+        );
+      // update on db: inc by -2
+      action = '1To-1';
+    }       
+
+    // turn up-arrow to color grey (sorta de-clickit)
+    $('.arrow-up').removeClass('on');       
   }
 
-  // clear comments input field
-  $('.comment').val('');
+  // if (voteType === 'arrow-up')
+  // url
+
+  $.ajax({
+    type : 'POST',
+    url : '/upVote',
+    data : {
+      itemId : itemId,
+      action : action
+    },
+    success : function (data) {
+      console.log('success upvote');
+      console.log('data:');
+      console.log(data);
+    },
+    error : function (data) {
+      console.log('\n\nerr: data:');
+      console.log(data);
+      console.log('\n');
+    },
+    dataType : 'json'
+  });
 }
-
-function getRatrIdFromListPoster (listPosterVal) {
-  console.log('listPosterVal:');
-  console.log(listPosterVal);
-  return listPosterVal.slice('posted by '.length, listPosterVal.length);
-}
-
-function getCommentorIds (commentorId) {
-  return String(commentorId);
-}
-
-// likeId is a string = event.target.id
-// returns a string id. 
-function getlistIdFromLikeId (likeId) {
-  return likeId.slice(likeId.indexOf('-') + 1, likeId.length);
-}
-
-// likeId is a string = event.target.id
-// returns a string id. 
-function getlistIdFromShareId (shareId) {
-  return shareId.slice(shareId.indexOf('btn-share-') + 'btn-share-'.length, shareId.length);
-}
-
-function getUpVoteId (buttonId) {
-  return buttonId.slice(buttonId.indexOf('-')+1, buttonId.length);
-}
-/* CALLBACK FUNCTIONS */
-
-// ajax /like
-function likeSuccess (data) {
-  // alert('success like');
-  console.log('\n\nsuccess data:');
-  console.log(data);
-  console.log('\n');
-
-  // update front end likes data
-  $('#likeValue-' + data.list._id).text(data.list.likes);
-}
-
-function shareSuccess (data) {
-   // alert('success like');
-  console.log('\n\nsuccess data:');
-  console.log(data);
-  console.log('\n');
-
-  // update front end likes data
-  $('#share-link-' + data._id).show()
-  .text("http://listratr.xyz/l/" + hyphenateTitle(data.title));
-}
-
-function hyphenateTitle (formalizedTitle) {
-  return formalizedTitle.split(' ')
-  .map(function (e, i, arr) {
-    e = e.toLowerCase();
-    if (i !=0)
-      return '-'+e;
-    else
-      return e;
-  }).join('');
-}
-

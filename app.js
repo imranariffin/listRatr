@@ -70,9 +70,10 @@ app.use('/listrize', listrize);
 
 app.get('/auth/facebook', passport.authenticate('facebook', { 
   scope : 'email' 
-}), function (req, res) {
-  res.redirect('/');
-}
+})
+// , function (req, res) {
+//   res.redirect('index');
+// }
 );
 
 app.get('/auth/facebook/callback', 
@@ -80,6 +81,13 @@ app.get('/auth/facebook/callback',
   // redirectToDashboard
   redirectToMain
 );
+// app.get('/auth/facebook/callback', function (req, res, next) {
+//   var code = req.query.code;
+
+//   // req.session.passport 
+
+//   res.send(code);
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -123,10 +131,16 @@ function updateSession (req, res, next) { //user next() for next middleware
   console.log('\n');
   console.log('req.session:');
   console.log(req.session);
+  console.log('req.locals:');
+  console.log(req.locals);
 
   console.log('\n');
   console.log('req.ratr:');
   console.log(req.ratr);
+  console.log('\n');
+  console.log('\n');
+  console.log('req.user:');
+  console.log(req.user);
   console.log('\n');
 
   if (req.session && req.session.ratr) {
@@ -137,14 +151,17 @@ function updateSession (req, res, next) { //user next() for next middleware
     ListRatr.findOne({ email : req.session.ratr.email }, function (err, ratr) {
       if (ratr) {
 
-        // save user to req object
-        req.ratr = ratr;
-        // delete password for security
-        delete req.ratr.password;
+        // // save user to req object
+        // req.ratr = ratr;
+        // // delete password for security
+        // delete req.ratr.password;
 
         // update session
-        req.session.ratr = req.ratr;
-        res.locals.ratr = req.ratr;
+        // req.session.ratr = req.ratr;
+        // res.locals.ratr = req.ratr;
+        req.session.ratr = ratr;
+        req.session.password = undefined;
+
         console.log('session updated');
       } else {
         console.log('user is undefined');
@@ -153,7 +170,7 @@ function updateSession (req, res, next) { //user next() for next middleware
       next();
     });
   } else {
-    console.log('req.session or req.session.user is false');
+    console.log('req.session or req.session.ratr is false');
     next();
   }
 }
@@ -161,9 +178,19 @@ function updateSession (req, res, next) { //user next() for next middleware
 // function redirectToDashboard (req, res) {
 function redirectToMain (req, res) {
 
-  console.log('redirecting to main');
+  console.log('IN redirectToMain()');
+  console.log('req.session.passport.ratr:');
+  console.log(req.session.passport.ratr);
+
   console.log('req.session.passport.user:');
   console.log(req.session.passport.user);
+
+  console.log('active user email (req.session.passport.user.emails[0])');
+  console.log(req.session.passport.user.emails[0]);
+  console.log('how about req.user.emails[0]):');
+  console.log(req.user.emails[0]);
+  // console.log('Or, how about req.ratr.emails):');
+  // console.log(req.ratr.emails);
 
   ListRatr.findOne({ email : req.session.passport.user.emails[0].value }, function (err, ratr) {
     if (!err) {
@@ -171,14 +198,26 @@ function redirectToMain (req, res) {
         req.session.ratr = ratr;
         console.log('req.session.ratr:');
         console.log(req.session.ratr);
-        console.log('redirect to main');
+        console.log('redirecting to main');
         // res.redirect('/dashboard');
         res.redirect('/');
+        // next();
+      } else if (req.ratr || req.session.ratr) {
+        // TEST
+        console.log('');
+        console.log('req.ratr:');
+        console.log(req.ratr);
+        console.log('req.session.ratr:');
+        console.log(req.session.ratr);
+        console.log('req.session:');
+        console.log(req.session);
+        console.log('');
+
       } else {
         console.log('error: no such user found in db');
         // res.send('error: no user found');
         // no user found, therefore create one using req.session
-        var ratr = req.session.ratr;
+        // var ratr = req.session.ratr;
 
         // ratr.save(function (err) {
         //   if (err)
