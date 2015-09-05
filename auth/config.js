@@ -1,7 +1,7 @@
-var facebookCallbackUrl = 'http://localhost:3000/auth/facebook/callback';
+// var facebookCallbackUrl = 'http://localhost:3000/auth/facebook/callback';
 
 // production:
-// var facebookCallbackUrl = 'http://listratr.herokuapp.com/auth/facebook/callback';
+var facebookCallbackUrl = 'http://listratr.herokuapp.com/auth/facebook/callback';
 
 var config = {
 	'facebook' : {
