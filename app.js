@@ -143,12 +143,12 @@ function updateSession (req, res, next) { //user next() for next middleware
   console.log(req.user);
   console.log('\n');
 
-  if (req.session && req.session.ratr) {
+  if (req.session && req.session.user) {
 
     // FIND USER by email (email is unique)
     // actually, finding by username should 
     // also work (username is also unique)
-    ListRatr.findOne({ email : req.session.ratr.email }, function (err, ratr) {
+    ListRatr.findOne({ email : req.session.user.email }, function (err, ratr) {
       if (ratr) {
 
         // // save user to req object
@@ -159,7 +159,7 @@ function updateSession (req, res, next) { //user next() for next middleware
         // update session
         // req.session.ratr = req.ratr;
         // res.locals.ratr = req.ratr;
-        req.session.ratr = ratr;
+        req.session.user = ratr;
         req.session.password = undefined;
 
         console.log('session updated');

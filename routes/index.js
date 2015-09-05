@@ -89,7 +89,7 @@ function homeGET (req, res, next) {
 			// rank now! (based on likes for now)
 			lists = sortByLikes(lists);
 
-			if (req.session.ratr) {
+			if (req.session.user) {
 				loggedIn = true;
 				notLoggedIn = false;
 			}
@@ -124,7 +124,7 @@ function homeGET (req, res, next) {
 			// 		// rendaaah!
 			// 		res.render('index', {
 			// 			title : 'Lystr',
-			// 			ratr : req.session.ratr,
+			// 			ratr : req.session.user,
 			// 			xyz : '.xyz',
 			// 			lists : lists,
 			// 			isAdmin : false,
@@ -142,7 +142,7 @@ function homeGET (req, res, next) {
 			// rendaaah!
 			res.render('index', {
 				title : 'Lystr',
-				ratr : req.session.ratr,
+				ratr : req.session.user,
 				xyz : '.xyz',
 				lists : lists,
 				isAdmin : false,
@@ -174,7 +174,7 @@ function getRatr (req, res, next) {
 
 /*GET: RENDER page of one active lystr, obtained from session*/
 function profileGET (req, res, next) {
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 
 	if (ratr) {
 
@@ -200,13 +200,13 @@ function profileGET (req, res, next) {
 /* identifies lystr by lystrId. A lystr can only get to see its own lists */
 function ratrIdGET (req, res, next) {
 	// get ratr
-	// var ratr = req.session.ratr;
+	// var ratr = req.session.user;
 
 	// get ratrId from url
 	var ratrId = req.params.ratrId;
 
-	if (ratrId != req.session.ratr._id) {
-		var activeRatr = req.session.ratr;
+	if (ratrId != req.session.user._id) {
+		var activeRatr = req.session.user;
 		if (activeRatr)
 			res.send('not your id, ' + activeRatr.email);
 		else
@@ -230,7 +230,7 @@ function ratrIdGET (req, res, next) {
 /* POST: ratr likes a list */
 function likePOST (req, res, next) {
 
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 	// expects a req.body.listId;
 	var listId = req.body.listId;
 
@@ -248,7 +248,7 @@ function likePOST (req, res, next) {
 
 /* GET: ratr shares a list by acquiring the link*/
 function shareGET (req, res, next) {
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 
 	// expects req.query form client
 	var listId = req.query.listId;
@@ -265,7 +265,7 @@ function shareGET (req, res, next) {
 
 /* POST: ratr upvotes a list item */
 function upVote (req, res, next) {
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 	var itemId = req.body.itemId;
 	var action = req.body.action;
 
@@ -334,7 +334,7 @@ function upVote (req, res, next) {
 
 /* POST: ratr gives a comment on a list item */
 function giveComment (req, res, next) {
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 	var ratrId;
 	// get form data
 	var commentId = req.body.commentId;
@@ -574,7 +574,7 @@ function signinPOST (req, res, next) {
 		} else {
 			if (ratr) {
 				// save session
-				req.session.ratr = ratr;	
+				req.session.user = ratr;	
 
 				console.log('good: ratr found');
 				res.send(ratr);
@@ -590,7 +590,7 @@ function signinPOST (req, res, next) {
 /* then RENDER 'lists' page 							*/
 function listsGET (req, res, next) {
 	// get ratrId
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 
 	// get nComments
 	var loggedIn = false, notLoggedIn = true;
@@ -605,7 +605,7 @@ function listsGET (req, res, next) {
 			// rank now! (based on likes for now)
 			lists = sortByLikes(lists);
 
-			if (req.session.ratr) {
+			if (req.session.user) {
 				loggedIn = true;
 				notLoggedIn = false;
 			}
@@ -631,7 +631,7 @@ function listsGET (req, res, next) {
 /* the acquired list corresponds to the unique list url */
 function getOneListByName (req, res, next) {
 	// get ratr
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 	// get list name from url
 	var listName = req.params.listName;
 	// convert listName from 'a-random-list-name' to 'aRandomListName'
@@ -782,7 +782,7 @@ function getOneListByName (req, res, next) {
 			var loggedIn = false;
 			var notLoggedIn = true;
 
-			if (req.session.ratr) {
+			if (req.session.user) {
 				loggedIn = true;
 				notLoggedIn = false;
 			}
@@ -814,7 +814,7 @@ function getOneListByName (req, res, next) {
 /* GET lystr's create list page. */
 function CreateListGET (req, res, next) {
 	// get ratr
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 
 	var loggedIn = false, notLoggedIn = true;
 	if (ratr) {
@@ -839,7 +839,7 @@ function CreateListGET (req, res, next) {
 /* POST lystr creates a new list. */
 function createListPOST (req, res, next) {
 	// get ratr
-	var ratr = req.session.ratr;
+	var ratr = req.session.user;
 	// get form data
 	var formData = req.body;
 	// EXTRACT FORM DATA
@@ -890,7 +890,7 @@ function createListPOST (req, res, next) {
 
 // GET:SEND. API to whether show 'you liked this list' or not on /lists and on /
 function doYouLikeThis (req, res, next) {
-	var lystr = req.session.ratr;
+	var lystr = req.session.user;
 	var response = {};
 	var listId = req.params.listId;
 
