@@ -1,4 +1,4 @@
-# listRatr
+# Lystr (previously ListRatr)
 Make your own list. Share it. View other lists. Rate em.
 
 Url: http://listratr.herokuapp.com/
